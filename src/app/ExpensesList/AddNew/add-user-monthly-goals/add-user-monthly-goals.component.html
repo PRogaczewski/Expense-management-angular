@@ -1,0 +1,37 @@
+<!-- Modal -->
+<div class="modal fade" id="userGoalsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add your goals</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="newUserGoalsForm" (ngSubmit)="AddUserGoals()">
+          <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
+            <div class="modal-body">
+              <label >Income</label>
+                <input formControlName="limit" class="form-control"
+                placeholder="2100" required/>
+                <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['limit'].errors">Limit is required</span>
+            </div>
+            <div class="modal-body">
+              <label >Category</label>
+              <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
+                  <option *ngFor="let type of categories | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
+              </select>
+              <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['category'].errors">Category is required</span>
+          </div>
+          <div class="modal-body">
+              <label >Income</label>
+                <input formControlName="month" class="form-control"
+                placeholder="2100" required/>
+                <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['limit'].errors">Limit is required</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" >Add</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>

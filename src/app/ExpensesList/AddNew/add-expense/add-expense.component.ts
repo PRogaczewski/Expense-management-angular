@@ -28,7 +28,7 @@ export class AddExpenseComponent implements OnInit {
     this.newExpenseForm = this.formBuilder.group({
       name: '',
       price: '',
-      category: ['Select one...', Validators.required],
+      category: ['', Validators.required],
     })
   }
 
@@ -41,7 +41,6 @@ export class AddExpenseComponent implements OnInit {
         price: parseFloat(this.getComponents['price'].value),
         userExpensesListId: this.listId!
       };
-      console.log(expenseRequest);
   
       this.service.AddExpense(expenseRequest);
   

@@ -1,15 +1,24 @@
-<div class="MainWindow-View" >
-    <h3 style="padding-top: 10px;">New expenses list</h3>
-    <hr/>
-    <form [formGroup]="newExpensesList">
-        <div style="width: 15%;">
-            <label style="font-size: 20px;">List name</label>
-            <input formControlName="name" class="form-control" placeholder="Seeder" required/>
+<div class="MainWindow-View">
+    <div class="container" style="text-align: center;">
+        <div class="form-row">
+            <div class="form-group col-md-5 mx-auto">
+                    <h2 style="padding-top: 5%;">New expenses list</h2>
+                    <hr/>
+                    <form [formGroup]="newExpensesList">
+                            <label style="font-size: 30px;">List name</label>
+                            <div class="form-group col-md-6 mx-auto">
+                                <input formControlName="name" class="form-control" type="text" style="font-size: 20px; width: 300px;" placeholder="Seeder" required/>
+                                <button style="font-size: 20px; margin-top: 1%; width: 300px;" class="btn btn-success" (click)="AddExpensesList()">Save</button>
+
+                            </div>
+                    </form>
+                 <br/> <br/>
+                 <div style="color:rgb(90, 204, 23);">
+                    Generate random by naming your list with "seeder".
+                 </div>
+                
+            </div>
         </div>
-        <button style="margin-top: 0.2%; width: 285px;" class="btn btn-success" (click)="AddExpensesList()">Save</button>
-    </form>
- <br/> <br/>
- <div style="color:rgb(90, 204, 23);">
-    Generate random by naming your list with "seeder".
- </div>
+    </div>
 </div>
+

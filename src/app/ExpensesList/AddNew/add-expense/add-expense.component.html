@@ -25,7 +25,7 @@
                 <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
                     <option *ngFor="let type of categories | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
                 </select>
-                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['price'].errors">Category is required</span>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['category'].errors">Category is required</span>
             </div>
             
             <div class="modal-footer">

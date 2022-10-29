@@ -40,4 +40,8 @@ categories=[];
   async AddExpense(expense:any){
     return axios.post(this.AnalysisApiUrl, expense)
   }
+
+  async AddUserGoals(goal: any){
+    return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', goal)
+  }
 }

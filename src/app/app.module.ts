@@ -12,6 +12,7 @@ import { AddExpenseComponent } from './ExpensesList/AddNew/add-expense/add-expen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddIncomeComponent } from './ExpensesList/AddNew/add-income/add-income.component';
 import { AddExpensesListComponent } from './ExpensesLists/CRUD/add-expenses-list/add-expenses-list.component';
+import { AddUserMonthlyGoalsComponent } from './ExpensesList/AddNew/add-user-monthly-goals/add-user-monthly-goals.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AddExpensesListComponent } from './ExpensesLists/CRUD/add-expenses-list
     AddExpenseComponent,
     AddIncomeComponent,
     AddExpensesListComponent,
+    AddUserMonthlyGoalsComponent,
   ],
   imports: [
     BrowserModule,
