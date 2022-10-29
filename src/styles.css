@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  font-family: "Lato", sans-serif;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  flex-grow: wrap;
+}
+
+body::after {
+  content:'' ;
+  display: block;
+  height: 100px;
+}
+
+.MainWindow-View {
+    padding-left: 20px;
+    transition: 0.6s;
+    padding-top: 90px;
+  }

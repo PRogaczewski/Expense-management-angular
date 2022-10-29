@@ -1,0 +1,89 @@
+#mySearch {
+    margin-top: 3%;
+    width: 85%;
+    margin-left: 6%;
+    font-size: 18px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+  }
+
+.sidenav {
+  height: 100%;
+  width: 0px;
+  position: fixed;
+  /* z-index: 1; */
+  top: 8.5vh;
+  /* bottom: 8.5vh; */
+  float: left;
+  /* left: 0;*/
+  /* background-color: rgb(13, 170, 13); */
+  background-color:rgb(169, 129, 207);
+  transition: 0.6s;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+
+.sidenav a~.AnalysisComponents{
+  width: 250px;
+}
+
+.sidenav a~.AnalysisComponents a {
+  font-size: 20px;
+  word-wrap: break-word;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 28px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #c2c1c1;
+}
+
+.sidenav a #open{
+  display: none;
+}
+
+.sidenav a:hover #open{
+  display: block;
+}
+
+.sidenav a:hover #close{
+  display: none;
+}
+
+.sidenav-scrollbar{
+  height: 58%;
+  overflow-y: scroll;
+  position: relative;
+}
+
+.sidenav-scrollbar::-webkit-scrollbar{
+  width: 9px;
+}
+
+.sidenav-scrollbar::-webkit-scrollbar-thumb{
+  background-color: grey;
+  border-radius: 10px;
+}
+
+.sidenav-scrollbar::-webkit-scrollbar-track{
+  background-color: rgb(169, 129, 207);
+
+}
+
+/* @media screen and (max-height: 450px) {
+  .sidenav{
+    width: 200px;
+  }
+    .sidenav a {
+    font-size: 18px;
+  }
+} */

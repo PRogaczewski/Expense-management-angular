@@ -1,0 +1,79 @@
+.container {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap:calc();
+}
+.block {
+  border: 3px solid black;
+  display: inline-block;
+  width: 500px;
+}
+.MonthlySummary {
+  border: 2px solid black;
+  display: inline-block;
+  width: 400px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.MonthlySummary-Categories {
+  border: 3px solid black;
+  display: inline-block;
+  width: 500px;
+  padding: 10px;
+  margin-top: 100px;
+  text-align: center;
+  margin-left: 10px;
+  padding-bottom: 130px;
+}
+
+.MonthlySummary-MonthCategories {
+  border: 3px solid black;
+  display: inline-block;
+  width: 800px;
+  padding: 40px;
+  text-align: center;
+  margin-left: 10px;
+  padding-bottom: 40px;
+}
+
+.MonthlySummary .MonthlySummary-A {
+  text-align: left;
+  vertical-align: top;
+  width: 500px;
+}
+
+.MonthlySummary-A .MonthlySummary-B {
+  text-align: center;
+  margin-left: 25px;
+  width: 240px;
+  vertical-align: top;
+  width: 300px !important;
+  height: 320px !important;
+}
+
+.MonthlySummary-A .MonthlySummary-C {
+  padding-left: 185px;
+  text-align: left;
+}
+
+/* .MonthlySummary-A .MonthlySummary-Cat{
+    width: 700px !important;
+    height:30px !important;
+} */
+
+.MonthlySummary-A .MonthlySummary-Week {
+  padding-left: 15px;
+  vertical-align: top;
+  text-align: left;
+  padding-bottom: 150px;
+  width: 350px !important;
+  height: 400px !important;
+}
+
+@media screen and (max-width: 1600px) {
+
+}

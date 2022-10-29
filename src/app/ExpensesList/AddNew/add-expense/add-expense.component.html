@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="newExpenseForm" (ngSubmit)="NewExpense()">
+          <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
+            <div class="modal-body">
+              <label >Name</label>
+                <input formControlName="name" class="form-control"
+                placeholder="Food shopping" required/>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['name'].errors">Name is required</span>
+            </div>
+            <div class="modal-body">
+              <label >Price</label>
+                <input formControlName="price" class="form-control"
+                placeholder="50.90" required/>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['price'].errors">Price is required</span>
+            </div>
+            <div class="modal-body">
+                <label >Category</label>
+                <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
+                    <option *ngFor="let type of categories | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
+                </select>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['price'].errors">Category is required</span>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" >Add</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
