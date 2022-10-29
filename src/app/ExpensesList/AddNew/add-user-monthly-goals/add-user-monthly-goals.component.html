@@ -22,10 +22,11 @@
               <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['category'].errors">Category is required</span>
           </div>
           <div class="modal-body">
-              <label >Income</label>
-                <input formControlName="month" class="form-control"
-                placeholder="2100" required/>
-                <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['limit'].errors">Limit is required</span>
+              <label >Month</label>
+              <select formControlName="month" id="month" required class="form-select" aria-label="Default select example">
+                <option *ngFor="let type of months | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
+            </select>
+                <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['month'].errors">Month is required</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

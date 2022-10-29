@@ -14,7 +14,24 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
   submitted: boolean = false;
   success: boolean = false;
 
+  months = [{value:'January', key:0},
+  {value:'Feburary', key:1},
+  {value:'March', key:2},
+  {value:'April', key:3},
+  {value:'May', key:4},
+  {value:'June', key:5},
+  {value:'July', key:6},
+  {value:'August', key:7},
+  {value:'September', key:8},
+  {value:'October', key:9},
+  {value:'Novamber', key:10},
+  {value:'December', key:11}
+]
+
+
   constructor(private formBuilder: FormBuilder, private service: ApiService) {}
+
+  month = new Date().toLocaleString('default', { month: 'long' });
 
   get components() {
     return this.newUserGoalsForm.controls;
