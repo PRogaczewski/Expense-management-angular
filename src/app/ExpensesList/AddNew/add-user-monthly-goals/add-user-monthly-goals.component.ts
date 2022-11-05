@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
@@ -13,21 +14,6 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
   categories: any[] = [];
   submitted: boolean = false;
   success: boolean = false;
-
-//   months = [
-//   {value:'January', key:1},
-//   {value:'Feburary', key:2},
-//   {value:'March', key:3},
-//   {value:'April', key:4},
-//   {value:'May', key:5},
-//   {value:'June', key:6},
-//   {value:'July', key:7},
-//   {value:'August', key:8},
-//   {value:'September', key:9},
-//   {value:'October', key:10},
-//   {value:'Novamber', key:11},
-//   {value:'December', key:12}
-// ]
 
 months = [
   'January',
@@ -59,28 +45,39 @@ months = [
     this.newUserGoalsForm = this.formBuilder.group({
       limit: '',
       category: ['', Validators.required],
-      month: ['']
+      monthChosenForGoal: ''
     });
   }
 
   AddUserGoals() {
     if (this.newUserGoalsForm.valid) {
-      let goalRequest = {
-        limit: this.components['limit'].value.toString(),
-        category: parseInt(this.components['category'].value),
-        month: (parseInt(this.components['month'].value) + 1).toString() + '-' + (new Date().getFullYear()).toString() ,
-        userExpensesListId: this.listId!,
-      };
 
-      if(!goalRequest.month){
-        console.log("adafaga")
-        goalRequest.month = (new Date().getMonth() + 1).toString() + '-' + (new Date().getFullYear()).toString();
+      let dateTimeMonth;
+
+      if(!this.components['monthChosenForGoal'].value){
+        dateTimeMonth = (new Date().getMonth() + 1).toString() + "-" + (new Date().getDay()).toString() + '-' + (new Date().getFullYear()).toString()
+      }
+      else{
+        dateTimeMonth = (parseInt(this.components['monthChosenForGoal'].value) + 1).toString() + "-" + (new Date().getDay()).toString() + '-' + (new Date().getFullYear()).toString()
       }
 
-      console.log(goalRequest);
-      console.log((new Date().getMonth() + 1).toString() + '-' + (new Date().getFullYear()).toString());
+      let newDate = new DatePipe('en-US').transform(dateTimeMonth, 'yyyy-MM-dd');
 
-      this.service.AddUserGoals(goalRequest);
+      console.log(newDate);
+
+      let UserExpenseGoalDto = {
+        userExpensesListId: this.listId!,
+        userCategoryGoals:[{
+          limit: this.components['limit'].value.toString(),
+        category: parseInt(this.components['category'].value),
+        }],
+        
+        monthChosenForGoal: newDate,
+      };
+
+      console.log(UserExpenseGoalDto);
+
+      this.service.AddUserGoals(UserExpenseGoalDto);
 
       this.success = true;
     } else {

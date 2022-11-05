@@ -69,7 +69,7 @@ export class GetListComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.MonthlyGoals(); 
+    
   }
 
   async ngOnInit() {
@@ -80,7 +80,7 @@ export class GetListComponent implements OnInit {
     this.SummaryChart();
     this.CurrentWeekExpensesChart();
     this.CurrentMonthByCategoriesChart();
-
+    this.MonthlyGoals(); 
     
     if(this.curr.getDate() >= 25 && this.expensesList.userGoals != null){
 
@@ -188,7 +188,7 @@ export class GetListComponent implements OnInit {
   }
 
   MonthlyGoals(){
-    
+    console.log("asdesdfhhfh")
     var maxValue:number = 0;
     const enumColors =['rgb(28, 185, 28)', 'rgb(245, 154, 18)', 'rgb(240, 9, 9)'];
 
@@ -198,12 +198,13 @@ export class GetListComponent implements OnInit {
       ([key, value]) => {
         const labels: any[]=[];
         const data: any[]=[];
-
+        
         labels.push(key);
         data.push(value);
         
         Object.entries(this.expensesList.userGoals).forEach(
           ([secKey, secValue]) => {
+
             if(key === secKey){
               if(typeof value === 'number' && typeof secValue === 'number') {
                 maxValue = secValue;

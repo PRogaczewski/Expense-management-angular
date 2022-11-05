@@ -9,7 +9,7 @@
         <form [formGroup]="newUserGoalsForm" (ngSubmit)="AddUserGoals()">
           <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
             <div class="modal-body">
-              <label >Income</label>
+              <label >Limit</label>
                 <input formControlName="limit" class="form-control"
                 placeholder="2100" required/>
                 <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['limit'].errors">Limit is required</span>
@@ -23,7 +23,7 @@
           </div>
           <div class="modal-body">
               <label >Month for your goal</label>
-              <select formControlName="month" id="month" class="form-select" aria-label="Default select example">
+              <select formControlName="monthChosenForGoal" id="monthChosenForGoal" class="form-select" aria-label="Default select example">
                 <option *ngFor="let type of months | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
             </select>
             <span style="color:grey">If empty it gets current month</span>
