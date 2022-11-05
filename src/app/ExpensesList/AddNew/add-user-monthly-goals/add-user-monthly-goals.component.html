@@ -22,11 +22,11 @@
               <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['category'].errors">Category is required</span>
           </div>
           <div class="modal-body">
-              <label >Month</label>
-              <select formControlName="month" id="month" required class="form-select" aria-label="Default select example">
+              <label >Month for your goal</label>
+              <select formControlName="month" id="month" class="form-select" aria-label="Default select example">
                 <option *ngFor="let type of months | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
             </select>
-                <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['month'].errors">Month is required</span>
+            <span style="color:grey">If empty it gets current month</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
