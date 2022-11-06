@@ -47,6 +47,7 @@ export class GetListComponent implements OnInit {
   currentId?: number;
   isMonthlyGoal:boolean = false;
   isCompareMonths:boolean = false;
+  weeklyExpenses: number = 0;
 
   constructor(
     private service: ApiService,
@@ -68,16 +69,13 @@ export class GetListComponent implements OnInit {
     );
   }
 
-  ngAfterViewInit(){
-    
-  }
-
   async ngOnInit() {
 
     let id = this.currRoute.snapshot.paramMap.get('id');
     await this.GetExpensesList(parseInt(id!));
 
     this.SummaryChart();
+    console.log(this.expensesList.currentWeekByCategories)
     this.CurrentWeekExpensesChart();
     this.CurrentMonthByCategoriesChart();
     this.MonthlyGoals(); 
@@ -168,6 +166,11 @@ export class GetListComponent implements OnInit {
       ([key, value]) => {
         labels.push(key);
         data.push(value);
+
+        if(typeof value==='number'){
+          this.weeklyExpenses += value;
+        }
+        
       }
     );
 
@@ -188,37 +191,37 @@ export class GetListComponent implements OnInit {
   }
 
   MonthlyGoals(){
-    console.log("asdesdfhhfh")
+    
     var maxValue:number = 0;
     const enumColors =['rgb(28, 185, 28)', 'rgb(245, 154, 18)', 'rgb(240, 9, 9)'];
 
-    let getColors: any = 'rgb(28, 185, 28)';
+    let getColors: any = enumColors[2];
 
-    Object.entries(this.expensesList.userExpenses).forEach(
-      ([key, value]) => {
+    Object.entries(this.expensesList.userGoals).forEach(
+      ([secKey, secValue]) => {
+
+        if((secKey in this.expensesList.userExpenses)==false){
+          this.expensesList.userExpenses[secKey] = 0;
+        }
+
         const labels: any[]=[];
         const data: any[]=[];
-        
-        labels.push(key);
-        data.push(value);
-        
-        Object.entries(this.expensesList.userGoals).forEach(
-          ([secKey, secValue]) => {
 
+        labels.push(secKey);
+
+        Object.entries(this.expensesList.userExpenses).forEach(
+          ([key, value]) => {
             if(key === secKey){
               if(typeof value === 'number' && typeof secValue === 'number') {
+
+                data.push(value);
                 maxValue = secValue;
-                const keyLabel: any = key;
-                const valueData: any = value;
 
                   if(value <= secValue*0.5){
                     getColors = enumColors[0];
                   }
                   else if(value <= secValue*0.9){
                     getColors = enumColors[1];
-                  }
-                  else{
-                    getColors = enumColors[2];
                   }
 
                     var canvas = document.createElement('canvas'),
@@ -272,77 +275,5 @@ export class GetListComponent implements OnInit {
             }
           });   
       });
-
-  //  var myChart = new Chart('MonthlyGoalsChart', {
-  //   type: 'bar',
-  //   data: {
-  //     labels: labels,
-  //     datasets: [{
-  //         indexAxis: 'y',
-  //         //label: 'Monthly goals',
-  //         data: data,
-  //         backgroundColor: getColors,
-  //         barThickness: 15,
-  //         borderWidth: 1,
-  //       }],
-  //   },
-  //   options:{
-  //     indexAxis: 'y',
-  //     maintainAspectRatio: false,
-  //     plugins:{
-  //       legend:{
-  //         display:false,
-  //       },
-  //     },
-  //     scales:{
-  //       x:{
-  //         min: 0,
-  //         max: maxValue,
-  //         ticks:{
-  //           maxTicksLimit: 2,
-  //           callback(tickValue, index, ticks) {
-  //             return tickValue + '.00' + ' PLN';
-  //           },
-  //         }
-  //       }
-  //     },
-  //   }
-  //  });
-   
-  //  let myChart2 = new Chart('MonthlyGoalsChart2', {
-  //   type: 'bar',
-  //   data: {
-  //     labels: labels,
-  //     datasets: [{
-  //         indexAxis: 'y',
-  //         //label: 'Monthly goals',
-  //         data: data,
-  //         backgroundColor: getColors,
-  //         barThickness: 15,
-  //         borderWidth: 1,
-  //       }],
-  //   },
-  //   options:{
-  //     indexAxis: 'y',
-  //     maintainAspectRatio: false,
-  //     plugins:{
-  //       legend:{
-  //         display:false,
-  //       },
-  //     },
-  //     scales:{
-  //       x:{
-  //         min: 0,
-  //         max: maxValue,
-  //         ticks:{
-  //           maxTicksLimit: 2,
-  //           callback(tickValue, index, ticks) {
-  //             return tickValue + '.00' + ' PLN';
-  //           },
-  //         }
-  //       }
-  //     },
-  //   }
-  //  }); 
   }
 }
