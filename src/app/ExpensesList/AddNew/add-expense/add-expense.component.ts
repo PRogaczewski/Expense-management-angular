@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
+import { GetListComponent } from '../../get-list/get-list.component';
 
 @Component({
   selector: 'app-add-expense',
@@ -33,7 +34,7 @@ export class AddExpenseComponent implements OnInit {
   }
 
   NewExpense(){
-    this.submitted=true;
+    this.submitted = true;
     if(this.newExpenseForm.valid){
       let expenseRequest = {
         name: this.getComponents['name'].value.toString(),
@@ -43,13 +44,14 @@ export class AddExpenseComponent implements OnInit {
       };
   
       this.service.AddExpense(expenseRequest);
-  
       this.success = true;
-      //window.location.reload();
+
+      this.newExpenseForm.reset();
+      this.submitted = false;
     }
     else{
       this.success = false;
-    }
-    console.log("error");
+      console.log("error 'new expense'");
+    }  
   }
 }

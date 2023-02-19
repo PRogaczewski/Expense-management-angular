@@ -1,5 +1,5 @@
 import { NONE_TYPE } from '@angular/compiler';
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   BarController,
@@ -19,9 +19,9 @@ import {
   ChartConfiguration,
   BubbleController,
 } from 'chart.js';
-import { NavbarHomeComponent } from 'src/app/navbar-home/navbar-home.component';
 import { ApiService } from 'src/app/services/api.service';
 import { __values } from 'tslib';
+import { AddUserMonthlyGoalsComponent } from '../AddNew/add-user-monthly-goals/add-user-monthly-goals.component';
 
 @Component({
   selector: 'app-get-list',
@@ -30,14 +30,14 @@ import { __values } from 'tslib';
 })
 export class GetListComponent implements OnInit {
   expensesList: any;
-
   monthlyCharts:any[]=[];
 
   currMonth = new Date().toLocaleString('default', { month: 'long' }) + ' ' + new Date().getFullYear().toString();
   colors: any[]=['rgb(28, 185, 28)','rgb(232, 9, 240)', 'rgb(239, 240, 9)', 'rgb(245, 154, 18)', 'rgb(240, 9, 9)', 'rgb(174, 9, 240)', 'rgb(92, 228, 148)', 'rgb(3, 5, 124)', 'rgb(48, 116, 65)', 'rgb(153, 144, 65)', 'rgb(4, 35, 211)', 'rgb(165, 5, 93)',  'rgb(248, 162, 92)', 'rgb(138, 230, 95)', 'rgb(98, 243, 243)', 'rgb(122, 35, 122)', 'rgb(81, 107, 179)', 'rgb(128, 44, 44)', 'rgb(133, 175, 35)'];
 
   curr = new Date;
-  first = this.curr.getDate() - this.curr.getDay() + 1;
+  first = this.curr.getDate() - this.curr.getDay() + (this.curr.getDay()===0 ? -6:1);
+
   last = this.first + 6;
 
   firstday = new Date(this.curr.setDate(this.first)).toLocaleString('default', {day: '2-digit'});
@@ -49,10 +49,12 @@ export class GetListComponent implements OnInit {
   isCompareMonths:boolean = false;
   weeklyExpenses: number = 0;
 
+  @ViewChild(AddUserMonthlyGoalsComponent) monthlyGoalsComponent:any;
+
   constructor(
     private service: ApiService,
-    private nav: NavbarHomeComponent,
-    private currRoute: ActivatedRoute
+    //private nav: NavbarHomeComponent,
+    private currRoute: ActivatedRoute,
   ) {
     Chart.register(
       BarElement,
@@ -69,22 +71,24 @@ export class GetListComponent implements OnInit {
     );
   }
 
-  async ngOnInit() {
-
+  async InitializeValues(){
     let id = this.currRoute.snapshot.paramMap.get('id');
     await this.GetExpensesList(parseInt(id!));
 
     this.SummaryChart();
-    console.log(this.expensesList.currentWeekByCategories)
     this.CurrentWeekExpensesChart();
     this.CurrentMonthByCategoriesChart();
     this.MonthlyGoals(); 
-    
-    if(this.curr.getDate() >= 25 && this.expensesList.userGoals != null){
-
-    }
 
     this.currentId=parseInt(id!);
+  }
+
+  async ngOnInit() {
+
+    await this.InitializeValues();
+    
+    if(this.curr.getDate() >= 25 && this.expensesList.userGoals != null){
+    }
   }
 
   async GetExpensesList(id: number) {
@@ -217,7 +221,7 @@ export class GetListComponent implements OnInit {
                 data.push(value);
                 maxValue = secValue;
 
-                  if(value <= secValue*0.5){
+                  if(value <= secValue*0.6){
                     getColors = enumColors[0];
                   }
                   else if(value <= secValue*0.9){

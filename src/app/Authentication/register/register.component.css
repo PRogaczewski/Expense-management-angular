@@ -1,0 +1,47 @@
+.AuthenticationContainer {
+    position: fixed;
+transform: translate(-50%, -50%);
+top:40%;
+left: 50%;
+  display: block;
+  text-align: center;
+  padding-top: 1%;
+  width: 50%;
+  max-width: 800px;
+  border-radius: 10px;
+  border: 3px solid black;
+}
+
+.AuthenticationContainer__input {
+    font-size: 1.3rem;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  width: 65%;
+  height: 45px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.AuthenticationContainer__button{
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    width: 30%;
+    font-size: 1.3rem;
+    margin: 1%;
+}
+
+.AuthenticationContainer__button:hover{
+    background-color: #3d3d3d;
+}
+
+.AuthenticationContainer__a:hover{
+    cursor: pointer;
+}
+
+@media screen and (max-height: 725px) {
+    .AuthenticationContainer{
+        top:8%;
+        transform: translate(-50%, 20%);
+    }
+}

@@ -1,0 +1,45 @@
+<div class="MainWindow-View">
+    <div class="AuthenticationContainer">
+        <h4>Register</h4>
+        <div>
+            <form [formGroup]="registerGroup" #form="ngForm" (ngSubmit)="Register()">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60px" height="50px" fill="currentColor" class="bi bi-file-person-fill" viewBox="-6 0 16 17.8">
+                        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-3 4c2.623 0 4.146.826 5 1.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.245C3.854 11.825 5.377 11 8 11z"/>
+                      </svg>
+                    <input class="AuthenticationContainer__input" type="text" placeholder="Username" formControlName="name" required/>
+                    <div *ngIf="registerGroup.controls['name'].invalid && form.submitted">
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['name'].errors?.['required']">Username is required</span>
+                    </div>
+                    </div>       
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60px" height="50px" fill="currentColor" class="bi bi-lock-fill" viewBox="-6 0 16 17.8">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                      </svg>
+                    <input class="AuthenticationContainer__input" type="password" placeholder="Password" formControlName="password" required/>
+                    <div *ngIf="registerGroup.controls['password'].invalid && form.submitted">
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['password'].errors?.['required']">Password is required</span>
+                    </div>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60px" height="50px" fill="currentColor" class="bi bi-lock-fill" viewBox="-6 0 16 17.8">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                      </svg>
+                    <input class="AuthenticationContainer__input" type="password" placeholder="Confirmed password" formControlName="confirmedPassword" required/>
+                    <div *ngIf="(registerGroup.controls['confirmedPassword'].invalid || registerGroup.errors?.['confirmedValidator']) && form.submitted">
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.errors?.['confirmedValidator']">Passwords must be the same</span>
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['confirmedPassword'].errors?.['required']">Password is required</span>
+                    </div>
+                </div>
+                <div>
+                    <button class="AuthenticationContainer__button" type="submit">Register</button>
+                </div>
+               <div>
+                <p>Already have an account? 
+                    <a class="AuthenticationContainer__a" (click)="Login()">Login</a>
+                </p>
+               </div>
+            </form>
+        </div>
+    </div>
+</div>

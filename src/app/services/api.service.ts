@@ -15,7 +15,7 @@ categories=[];
 
   //Lists
   async GetCategories(){
-    const {data:categories} = await axios.get(this.HomeApiUrl + 'enum')
+    const {data:categories} = await axios.get(this.HomeApiUrl + 'GetCategories');
     return categories;
   }
   async GetExpensesLists(){
@@ -30,18 +30,18 @@ categories=[];
 
   //Expenses
   async GetExpensesList(id: number){
-    return await axios.get(this.AnalysisApiUrl + id)
+    return await axios.get(this.AnalysisApiUrl + id);
   }
 
   async AddIncome(income:any){
-    return axios.post(this.AnalysisApiUrl + 'UserIncome', income)
+    return axios.post(this.AnalysisApiUrl + 'UserIncome', income);
   }
 
   async AddExpense(expense:any){
-    return axios.post(this.AnalysisApiUrl, expense)
+    return axios.post(this.AnalysisApiUrl, expense);
   }
 
   async AddUserGoals(UserExpenseGoalDto: any){
-    return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', UserExpenseGoalDto)
+    return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', UserExpenseGoalDto);
   }
 }

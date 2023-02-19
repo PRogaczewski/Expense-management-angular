@@ -7,16 +7,15 @@
                     <form [formGroup]="newExpensesList">
                             <label style="font-size: 30px;">List name</label>
                             <div class="form-group col-md-6 mx-auto">
-                                <input formControlName="name" class="form-control" type="text" style="font-size: 20px; width: 300px;" placeholder="Seeder" required/>
+                                <input formControlName="name" class="form-control" type="text" style="font-size: 20px; width: 300px;" placeholder="Seeder" ngModel maxlength="15" required/>
+                                <span style="color:red; float: left;" *ngIf="submitted && newExpensesList.controls['name'].errors">The field cannot be empty!</span>
                                 <button style="font-size: 20px; margin-top: 1%; width: 300px;" class="btn btn-success" (click)="AddExpensesList()">Save</button>
-
                             </div>
                     </form>
                  <br/> <br/>
-                 <div style="color:rgb(90, 204, 23);">
-                    Generate random by naming your list with "seeder".
+                 <div style="color:rgb(224, 106, 10);">
+                    Generate random filled list by naming it with the word "seeder".
                  </div>
-                
             </div>
         </div>
     </div>

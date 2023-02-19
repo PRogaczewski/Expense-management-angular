@@ -15,6 +15,10 @@
       </a>
     </div>
   
+    <div style="display: flex; margin-right: -45%;" *ngIf="IsUserLogged">
+      <h4 style="color: black;">Welcome {{LoggedUserName}}</h4>
+      <a style="padding-left: 10px; color: black; font-size: 1.3rem; cursor: pointer;" (click)="Logout()">| Logout</a>
+    </div>
     <div style="margin-right: 2%;">
       <a class="nav-link p-2" href="https://github.com/PRogaczewski">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" focusable="false">

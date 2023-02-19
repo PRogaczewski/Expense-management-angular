@@ -1,8 +1,7 @@
 .navbar-expenses {
-  height: 8.5vh;
+  height: 80px;
   position: fixed;
   width: 100%;
-  /* background-color: rgb(75, 3, 143); */
   background: rgb(63,94,251);
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(89,4,69,1) 0%, rgba(75,3,143,1) 100%);
 }
@@ -16,8 +15,6 @@
   border: none;
   display: inline-block;
   background-color: rgb(76, 5, 140);
-  /* background: rgb(63,94,251);
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(89,4,69,1) 0%, rgba(75,3,143,1) 100%); */
   padding: 5px 5px;
   /* text-align: center; */
   cursor: pointer;
@@ -30,5 +27,7 @@
 }
 
 .sidenavBtn:active{
-  background-color: rgb(57, 2, 109);;
+  background-color: rgb(57, 2, 109);
+  border-radius: 20px;
 }
+

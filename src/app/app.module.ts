@@ -13,6 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddIncomeComponent } from './ExpensesList/AddNew/add-income/add-income.component';
 import { AddExpensesListComponent } from './ExpensesLists/CRUD/add-expenses-list/add-expenses-list.component';
 import { AddUserMonthlyGoalsComponent } from './ExpensesList/AddNew/add-user-monthly-goals/add-user-monthly-goals.component';
+import { LoginComponent } from './Authentication/login/login.component';
+import { RegisterComponent } from './Authentication/register/register.component';
+import { AuthenticationComponent } from './Authentication/authentication/authentication.component';
+import { RoutingService } from './RoutingService';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,9 @@ import { AddUserMonthlyGoalsComponent } from './ExpensesList/AddNew/add-user-mon
     AddIncomeComponent,
     AddExpensesListComponent,
     AddUserMonthlyGoalsComponent,
+    LoginComponent,
+    RegisterComponent,
+    AuthenticationComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { GetListComponent } from 'src/app/ExpensesList/get-list/get-list.component';
+import { RoutingService } from 'src/app/RoutingService';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -10,18 +12,28 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class GetListsComponent implements OnInit {
   expensesLists: any[] = [];
-  searchedText: string = "";
-  userNavbar :boolean = false;
+  searchedText: string = '';
+  userNavbar: boolean = false;
 
-  constructor(private service: ApiService, private route :Router, private expensesList: GetListComponent) {}
+  IsUserLogged: boolean = false;
+
+  constructor(
+    private service: ApiService,
+    private route: Router,
+    private expensesList: GetListComponent,
+    private routing: RoutingService
+  ) {}
 
   async ngOnInit() {
     this.expensesLists = await this.service.GetExpensesLists();
 
-    if(this.route.url.includes('/ExpensesList/')) {
+    this.routing.getUserInfo().subscribe((value: boolean) => {
+      this.IsUserLogged = value;
+    });
+
+    if (this.route.url.includes('/ExpensesList/')) {
       this.userNavbar = true;
-    }
-    else{
+    } else {
       this.userNavbar = false;
     }
   }
@@ -29,16 +41,26 @@ export class GetListsComponent implements OnInit {
   SearchExpensesList() {
     let input = (<HTMLInputElement>document.getElementById('mySearch')).value;
 
-    return this.searchedText = input.toUpperCase();
+    return (this.searchedText = input.toUpperCase());
   }
 
   GetExpensesList(id: number) {
     this.expensesList.GetExpensesList(id);
-    this.route.navigate(['/ExpensesList/'+ id])
+    this.route.navigate(['/ExpensesList/' + id]);
     this.userNavbar = true;
   }
 
-  AddNewList(){
-    this.route.navigate(['/ExpensesList'])
+  AddNewList() {
+    this.route.navigate(['/ExpensesList']);
+  }
+
+  Login() {
+    this.routing.setData(true);
+    this.route.navigate(['/Authentication']);
+  }
+
+  Register() {
+    this.routing.setData(false);
+    this.route.navigate(['/Authentication']);
   }
 }

@@ -8,6 +8,7 @@
         </div>
         <form [formGroup]="newUserGoalsForm" (ngSubmit)="AddUserGoals()">
           <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
+          <span style="color: red; padding-left: 20px; font-size: 25px;" *ngIf="isNotSuccessfully">This category has already been selected at this month.</span>
             <div class="modal-body">
               <label >Limit</label>
                 <input formControlName="limit" class="form-control"
@@ -24,13 +25,13 @@
           <div class="modal-body">
               <label >Month for your goal</label>
               <select formControlName="monthChosenForGoal" id="monthChosenForGoal" class="form-select" aria-label="Default select example">
-                <option *ngFor="let type of months | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
-            </select>
-            <span style="color:grey">If empty it gets current month</span>
-            </div>
+                <option *ngFor="let type of months | keyvalue" [ngValue]="type.key">{{type.key}}</option>
+              </select>
+              <span style="color:grey">Empty field will get current month</span>
+          </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" >Add</button>
+                <button type="submit" class="btn btn-success">Add</button>
             </div>
         </form>
     </div>
