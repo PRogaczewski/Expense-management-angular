@@ -11,19 +11,20 @@
             <div class="modal-body">
               <label >Name</label>
                 <input formControlName="name" class="form-control"
-                placeholder="Food shopping" required/>
+                placeholder="Food" required/>
                 <span style="color:red" *ngIf="submitted && newExpenseForm.controls['name'].errors">Name is required</span>
             </div>
             <div class="modal-body">
               <label >Price</label>
                 <input formControlName="price" class="form-control"
                 placeholder="50.90" required/>
-                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['price'].errors">Price is required</span>
-            </div>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['price'].errors?.['required']">Price is required</span>
+                <span style="color:red" *ngIf="submitted && newExpenseForm.errors?.['commaValidator']">',' is not correct character</span>
+              </div>
             <div class="modal-body">
                 <label >Category</label>
                 <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
-                    <option *ngFor="let type of categories | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
+                    <option *ngFor="let type of mappedCategoires | keyvalue" [ngValue]="+type.key" selected>{{type.value}}</option>
                 </select>
                 <span style="color:red" *ngIf="submitted && newExpenseForm.controls['category'].errors">Category is required</span>
             </div>

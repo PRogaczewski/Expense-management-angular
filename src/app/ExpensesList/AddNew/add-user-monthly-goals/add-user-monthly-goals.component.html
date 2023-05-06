@@ -18,16 +18,15 @@
             <div class="modal-body">
               <label >Category</label>
               <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
-                  <option *ngFor="let type of categories | keyvalue" [ngValue]="type.key" selected>{{type.value}}</option>
+                  <option *ngFor="let type of mappedCategoires | keyvalue" [ngValue]="+type.key">{{type.value}}</option>
               </select>
               <span style="color:red" *ngIf="submitted && newUserGoalsForm.controls['category'].errors">Category is required</span>
           </div>
           <div class="modal-body">
               <label >Month for your goal</label>
               <select formControlName="monthChosenForGoal" id="monthChosenForGoal" class="form-select" aria-label="Default select example">
-                <option *ngFor="let type of months | keyvalue" [ngValue]="type.key">{{type.key}}</option>
+                <option *ngFor="let type of months| keyvalue" [ngValue]="+type.key">{{type.value}}</option>
               </select>
-              <span style="color:grey">Empty field will get current month</span>
           </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

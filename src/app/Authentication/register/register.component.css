@@ -1,8 +1,8 @@
 .AuthenticationContainer {
-    position: fixed;
-transform: translate(-50%, -50%);
-top:40%;
-left: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 40%;
+  left: 50%;
   display: block;
   text-align: center;
   padding-top: 1%;
@@ -13,7 +13,7 @@ left: 50%;
 }
 
 .AuthenticationContainer__input {
-    font-size: 1.3rem;
+  font-size: 1.3rem;
   margin-top: 1%;
   margin-bottom: 1%;
   width: 65%;
@@ -22,26 +22,26 @@ left: 50%;
   border-bottom-right-radius: 20px;
 }
 
-.AuthenticationContainer__button{
-    background-color: black;
-    color: white;
-    border-radius: 20px;
-    width: 30%;
-    font-size: 1.3rem;
-    margin: 1%;
+.AuthenticationContainer__button {
+  background-color: black;
+  color: white;
+  border-radius: 20px;
+  width: 30%;
+  font-size: 1.3rem;
+  margin: 1%;
 }
 
-.AuthenticationContainer__button:hover{
-    background-color: #3d3d3d;
+.AuthenticationContainer__button:hover {
+  background-color: #3d3d3d;
 }
 
-.AuthenticationContainer__a:hover{
-    cursor: pointer;
+.AuthenticationContainer__a:hover {
+  cursor: pointer;
 }
 
 @media screen and (max-height: 725px) {
-    .AuthenticationContainer{
-        top:8%;
-        transform: translate(-50%, 20%);
-    }
+  .AuthenticationContainer {
+    top: 8%;
+    transform: translate(-50%, 20%);
+  }
 }

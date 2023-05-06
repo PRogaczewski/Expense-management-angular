@@ -11,8 +11,9 @@
               <label >Income</label>
                 <input formControlName="income" class="form-control"
                 placeholder="4500.90" required/>
-                <span style="color:red" *ngIf="submitted && newIncomeForm.controls['income'].errors">Income is required</span>
-            </div>
+                <span style="color:red" *ngIf="submitted && newIncomeForm.controls['income'].errors?.['required']">Income is required</span>
+                <span style="color:red" *ngIf="submitted && newIncomeForm.errors?.['commaValidator']">',' is not correct character</span>
+              </div>
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

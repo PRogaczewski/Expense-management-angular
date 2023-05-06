@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { empty } from 'rxjs';
-import { GetListsComponent } from './ExpensesLists/get-lists/get-lists.component';
+
 
 @Component({
   selector: 'app-root',

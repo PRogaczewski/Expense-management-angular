@@ -1,6 +1,7 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from 'src/app/AuthService';
 import { GetListComponent } from 'src/app/ExpensesList/get-list/get-list.component';
 import { RoutingService } from 'src/app/RoutingService';
 import { ApiService } from 'src/app/services/api.service';
@@ -14,27 +15,70 @@ export class GetListsComponent implements OnInit {
   expensesLists: any[] = [];
   searchedText: string = '';
   userNavbar: boolean = false;
+  AnyList: boolean = true;
 
   IsUserLogged: boolean = false;
 
-  constructor(
+ constructor(
     private service: ApiService,
     private route: Router,
-    private expensesList: GetListComponent,
-    private routing: RoutingService
-  ) {}
-
-  async ngOnInit() {
-    this.expensesLists = await this.service.GetExpensesLists();
-
-    this.routing.getUserInfo().subscribe((value: boolean) => {
-      this.IsUserLogged = value;
+    private eventSubscriber: ActivatedRoute,
+    private routing: RoutingService,
+    private auth: AuthService
+  ) {
+    route.events.subscribe((event) => {
+      
+      if(this.IsUserLogged && !this.route.url.includes('/ExpensesList/')){
+        this.GetList();
+        this.userNavbar = false;
+      }
+      else if(this.route.url.includes('/ExpensesList/') && this.IsUserLogged){
+        this.userNavbar = true
+      }
+      else{
+        this.userNavbar = false;
+      }
     });
 
-    if (this.route.url.includes('/ExpensesList/')) {
-      this.userNavbar = true;
-    } else {
-      this.userNavbar = false;
+    this.eventSubscriber.queryParams.subscribe(par=>{
+      this.routing.getUserInfo().subscribe((value: boolean) => {
+        this.IsUserLogged = value;
+
+        if(this.IsUserLogged && !this.route.url.includes('/ExpensesList/')){
+          this.GetList();
+          this.userNavbar = false;
+        }
+      });
+    })
+  }
+
+  async ngOnInit() {
+    if(this.auth.GetUserContext()){
+      this.IsUserLogged = true;
+     }
+     else{
+      this.IsUserLogged = false;
+     }
+
+    if(this.IsUserLogged){
+      try{
+        await this.service.GetExpensesLists().then((res)=>{
+          this.expensesLists = res.data.userLists;
+        });
+      }
+      catch{
+        console.log("some err")
+      }
+    }
+  }
+
+  async GetList(){
+    await this.service.GetExpensesLists().then((res)=>{
+      this.expensesLists = res.data.userLists;
+    });
+
+    if(this.expensesLists.length > 0){
+        this.AnyList = false;
     }
   }
 
@@ -45,7 +89,7 @@ export class GetListsComponent implements OnInit {
   }
 
   GetExpensesList(id: number) {
-    this.expensesList.GetExpensesList(id);
+    //this.expensesList.GetExpensesList(id);
     this.route.navigate(['/ExpensesList/' + id]);
     this.userNavbar = true;
   }

@@ -1,23 +1,37 @@
 <div class="MainWindow-View">
-    <div class="container" style="text-align: center;">
-        <div class="form-row">
-            <div class="form-group col-md-5 mx-auto">
-                    <h2 style="padding-top: 5%;">New expenses list</h2>
-                    <hr/>
-                    <form [formGroup]="newExpensesList">
-                            <label style="font-size: 30px;">List name</label>
-                            <div class="form-group col-md-6 mx-auto">
-                                <input formControlName="name" class="form-control" type="text" style="font-size: 20px; width: 300px;" placeholder="Seeder" ngModel maxlength="15" required/>
-                                <span style="color:red; float: left;" *ngIf="submitted && newExpensesList.controls['name'].errors">The field cannot be empty!</span>
-                                <button style="font-size: 20px; margin-top: 1%; width: 300px;" class="btn btn-success" (click)="AddExpensesList()">Save</button>
-                            </div>
-                    </form>
-                 <br/> <br/>
-                 <div style="color:rgb(224, 106, 10);">
-                    Generate random filled list by naming it with the word "seeder".
-                 </div>
-            </div>
-        </div>
+  <div class="AddListContainer">
+    <h2>New expenses list</h2>
+    <hr />
+    <form [formGroup]="newExpensesList" (ngSubmit)="AddExpensesList()">
+      <label style="font-size: 1.6rem">Enter list name</label>
+      <input
+        formControlName="name"
+        class="form-control AddListContainer__input"
+        type="text"
+        placeholder="Seeder"
+        ngModel
+        maxlength="15"
+        required
+      />
+      <div>
+        <span
+          style="color: red; width: 300px"
+          *ngIf="submitted && newExpensesList.controls['name'].errors"
+          >The name field cannot be empty!</span
+        >
+      </div>
+      <button
+        type="submit"
+        style="font-size: 1.2rem; margin-top: 1%; width: 300px"
+        class="btn btn-success"
+      >
+        Save
+      </button>
+    </form>
+    <br />
+    <br />
+    <div style="color: rgb(224, 106, 10)">
+      Generate random filled list by naming it with the word "seeder".
     </div>
+  </div>
 </div>
-

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/AuthService';
@@ -10,6 +10,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css', '../register/register.component.css'],
 })
+
 export class LoginComponent implements OnInit {
   loginGroup!: FormGroup;
 
@@ -39,14 +40,23 @@ export class LoginComponent implements OnInit {
         password: this.getComponents['password'].value,
       };
 
-      const model = await this.service.Login(loginModel);
+      try{
+        const model = await this.service.Login(loginModel);
       
       if(model.status == 200){
         this.routing.setUserInfo(true);
         this.routing.setUserName(model.data.name);
 
         this.auth.SetToken(model.data.token);
-        this.route.navigate(['/']);
+        this.auth.SetUserContext(model.data.name);
+        this.route.navigateByUrl('/');
+      }
+      }
+      catch(err){
+        if(err instanceof Error){
+          this.loginGroup.setErrors({unexpected: true})
+          console.log(err.message)
+        }
       }
     }
   }

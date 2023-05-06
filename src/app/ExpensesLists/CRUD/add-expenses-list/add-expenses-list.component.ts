@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class AddExpensesListComponent implements OnInit {
   newExpensesList!: FormGroup;
   submitted: boolean = false;
 
-  constructor(private service: ApiService, private formBuilder: FormBuilder) {}
+  constructor(private service: ApiService, private formBuilder: FormBuilder,  private route: Router,) {}
 
   get getComponents() {
     return this.newExpensesList.controls;
@@ -25,15 +26,19 @@ export class AddExpensesListComponent implements OnInit {
     });
   }
 
-  AddExpensesList() {
+  async AddExpensesList() {
     if (this.newExpensesList.valid) {
       let listName = {
         name: this.getComponents['name'].value,
       };
 
-      console.log(listName);
-
-      this.service.createExpensesList(listName);
+      try{
+        await this.service.createExpensesList(listName);
+        this.route.navigate(['']);
+      }
+      catch(err){
+        console.log(err);
+      }
     } else {
       this.submitted = true;
     }

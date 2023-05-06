@@ -22,14 +22,17 @@
                         <span style="color:red; display: flex; padding-left: 22%;" *ngIf="loginGroup.controls['password'].errors?.['required']">Password is required</span>
                     </div>
                 </div>
+                <div *ngIf="loginGroup.errors?.['unexpected']">
+                    <span style="color:red; display: flex; padding-left: 22%;">Unexpected error occurred</span>
+                </div>
                 <div>
                     <button type="submit" class="AuthenticationContainer__button">Login</button>
                 </div>
-               <div>
-                <p>Don`t have an account? 
-                    <a class="AuthenticationContainer__a" (click)="Register()">Register</a>
-                </p>
-               </div>
+                <div>
+                    <p>Don`t have an account? 
+                        <a class="AuthenticationContainer__a" (click)="Register()">Register</a>
+                    </p>
+                </div>
             </div>
         </form>
     </div>

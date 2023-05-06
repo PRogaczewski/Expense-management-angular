@@ -1,0 +1,23 @@
+.AddListContainer {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 25%;
+  left: 50%;
+  display: block;
+  text-align: center;
+  width: 50%;
+  max-width: 800px;
+}
+
+.AddListContainer__input {
+  font-size: 1.2rem;
+  width: 300px;
+  margin: auto;
+}
+
+@media screen and (max-height: 900px) {
+  .AddListContainer {
+    top: 20%;
+    transform: translate(-50%, 20%);
+  }
+}

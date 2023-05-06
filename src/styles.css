@@ -16,5 +16,5 @@ body::after {
 .MainWindow-View {
     padding-left: 20px;
     transition: 0.6s;
-    padding-top: 5%;
+    padding-top: 5rem;
   }

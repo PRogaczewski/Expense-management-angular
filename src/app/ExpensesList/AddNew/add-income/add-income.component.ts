@@ -26,19 +26,24 @@ export class AddIncomeComponent implements OnInit {
   }
 
   AddUserIncome() {
+    this.StringContainsComma(this.getComponents['income'].value)
+
     if (this.newIncomeForm.valid) {
       let income = {
         userExpensesListId: this.listId!,
         income: parseFloat(this.getComponents['income'].value)};
-
-        console.log(income);
-        
        this.service.AddIncome(income);
 
        window.location.reload();
     }
     else{
       this.submitted=true;
+    }
+  }
+
+  StringContainsComma(value: string){
+    if(value.includes(',')){
+      this.newIncomeForm.setErrors({commaValidator: true})
     }
   }
 }

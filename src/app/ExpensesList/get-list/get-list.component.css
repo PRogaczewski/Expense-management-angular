@@ -1,79 +1,87 @@
-.container {
-  box-sizing: border-box;
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap:calc();
-}
-.block {
-  border: 3px solid black;
-  display: inline-block;
-  width: 500px;
-}
 .MonthlySummary {
   border: 2px solid black;
-  display: inline-block;
-  width: 400px;
-  padding: 10px;
-  margin-top: 10px;
-  text-align: center;
-  margin-left: 10px;
-}
+  width: 35%;
+  padding: 1%;
+  margin-top: 1%;
+  margin-left: 1%;
 
-.MonthlySummary-Categories {
-  border: 3px solid black;
-  display: inline-block;
-  width: 500px;
-  padding: 10px;
-  margin-top: 100px;
-  text-align: center;
-  margin-left: 10px;
-  padding-bottom: 130px;
-}
-
-.MonthlySummary-MonthCategories {
-  border: 3px solid black;
-  display: inline-block;
-  width: 800px;
-  padding: 40px;
-  text-align: center;
-  margin-left: 10px;
-  padding-bottom: 40px;
+  max-width: 1300px;
+  min-width: 750px;
 }
 
 .MonthlySummary .MonthlySummary-A {
   text-align: left;
   vertical-align: top;
-  width: 500px;
+}
+
+.MonthlySummary-C {
+  text-align: center;
+  padding-top: 5%;
+  margin-bottom: -1%;
 }
 
 .MonthlySummary-A .MonthlySummary-B {
-  text-align: center;
-  margin-left: 25px;
-  width: 240px;
+  margin-left: 25%;
+  padding-top: 3%;
   vertical-align: top;
-  width: 300px !important;
-  height: 320px !important;
+  width: 60%;
+
+  max-width: 500px;
 }
 
-.MonthlySummary-A .MonthlySummary-C {
-  padding-left: 185px;
-  text-align: left;
-}
+.MonthlySummary-A .MonthlySummary-Cat {
+  padding-left: -1%;
+  padding-top: 3%;
+  width: 100%;
 
-/* .MonthlySummary-A .MonthlySummary-Cat{
-    width: 700px !important;
-    height:30px !important;
-} */
+  max-width: 1100px;
+}
 
 .MonthlySummary-A .MonthlySummary-Week {
-  padding-left: 15px;
-  vertical-align: top;
+  padding-left: 2%;
+  padding-top: 3%;
+  margin-left: 25%;
+  width: 55%;
+
+  max-width: 500px;
+}
+
+#bar-description-percentage{
+  margin-top: 0.1%;
+  float:left;
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem
+}
+
+#bar-description-left{
   text-align: left;
-  padding-bottom: 150px;
-  width: 350px !important;
-  height: 400px !important;
 }
 
-@media screen and (max-width: 1600px) {
-
+#bar-description-center{
+  text-align: center;
 }
+
+#bar-description-right{
+  text-align: right;
+}
+
+.category{
+  margin-left: 2.5%;
+  margin-top: 10%;
+  font-size: 1.4rem;
+}
+
+#chart :last-child > hr {
+  display: none;
+}
+
+/* @media screen and (max-width: 2500px) {
+  .container{
+    display: inline-block;
+    overflow: hidden;
+    flex-direction: row;
+   flex-wrap:calc();
+  }
+} 
+*/

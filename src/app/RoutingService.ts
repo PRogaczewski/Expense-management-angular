@@ -17,10 +17,12 @@ export class RoutingService {
     this.data.next(value);
   }
 
+  //Is user already logged in
   getUserInfo() {
     return this.isUserLogged.asObservable();
   }
 
+  //Set user state
   setUserInfo(value: boolean) {
     this.isUserLogged.next(value);
   }

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -16,20 +16,24 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
   success: boolean = false;
   isNotSuccessfully: boolean = false;
 
-  months = [
-    'January',
-    'Feburary',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'Novamber',
-    'December'
-  ]
+  mappedCategoires = new Map();
+
+  months = new Map(
+    [
+      [0, 'January'],
+      [1, 'Feburary'],
+      [2, 'March'],
+      [3, 'April'],
+      [4, 'May'],
+      [5, 'June'],
+      [6, 'July'],
+      [7, 'August'],
+      [8, 'September'],
+      [9, 'October'],
+      [10, 'Novamber'],
+      [11, 'December'],
+    ]
+  );
 
   constructor(private formBuilder: FormBuilder, private service: ApiService) {}
 
@@ -38,18 +42,19 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.months);
     this.success = false;
     this.isNotSuccessfully = false;
     this.submitted = false;
 
-    this.categories = await this.service.GetCategories();
-
     this.newUserGoalsForm = this.formBuilder.group({
       limit: '',
-      category: ['', Validators.required],
-      monthChosenForGoal: ''
+      category: [0, Validators.required],
+      monthChosenForGoal: new Date().getMonth()
     });
+
+    this.categories = await this.service.GetCategories();
+
+    this.mappedCategoires = new Map(this.categories.map((value, index) => [index, value]));
   }
 
   async AddUserGoals() {
@@ -57,17 +62,9 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
 
       let dateTimeMonth;
 
-      if(!this.components['monthChosenForGoal'].value){
-        dateTimeMonth = (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate()).toString() + '-' + (new Date().getFullYear()).toString()
-      }
-      else{
-        dateTimeMonth = (parseInt(this.components['monthChosenForGoal'].value) + 1).toString() + "-" + (new Date().getDate()).toString() + '-' + (new Date().getFullYear()).toString()
-      }
+      dateTimeMonth = (parseInt(this.components['monthChosenForGoal'].value) + 1).toString() + "-" + (new Date().getDate()).toString() + '-' + (new Date().getFullYear()).toString()
 
-      console.log(dateTimeMonth);
       let newDate = new DatePipe('en-US').transform(dateTimeMonth, 'yyyy-MM-dd');
-
-      console.log(newDate);
 
       let UserExpenseGoalDto = {
         userExpensesListId: this.listId!,
@@ -79,13 +76,9 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
         monthChosenForGoal: newDate,
       };
 
-      console.log(UserExpenseGoalDto);
-
       if(await this.service.AddUserGoals(UserExpenseGoalDto)){
-        console.log("git");
         this.success = true;
       }else{
-        console.log("nie git");
         this.isNotSuccessfully = true;
       }  
 
@@ -94,7 +87,6 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
 
     } else {
       this.submitted = true;
-      console.log("Aaaaaa")
     }
   }
 }

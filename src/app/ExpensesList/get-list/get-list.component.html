@@ -1,60 +1,57 @@
 <app-add-expense [listId]="currentId"></app-add-expense>
 <app-add-income [listId]="currentId"></app-add-income>
 <app-add-user-monthly-goals [listId]="currentId"></app-add-user-monthly-goals>
+<app-delete-list [listId]="currentId"></app-delete-list>
 
 <div class="MainWindow-View"> 
-    <div class="container">
-        <div class="MonthlySummary" style="margin-left: -20px;">
-            <h3>Summary</h3>
+    <div class="row justify-content-center" style="margin-left: 0%; width: 100%;">
+        <div class="MonthlySummary">
+            <h2>Summary</h2>
             <div class="MonthlySummary-A">
-                <h4>{{currMonth}}</h4>
+                <h3>{{currMonth}}</h3>
                 <div class="MonthlySummary-B">
                     <canvas id="PieChartSummary"></canvas>
                 </div>
             </div>  
             <div class="MonthlySummary-C" style="text-align: left;">
-                <h5>Income: {{expensesList.incomes}}</h5>
-                <h5>Outgoings: -{{expensesList.outgoings}}</h5>
-                <h5 id="summary">Summary: {{expensesList.monthlyResult}}</h5>
+                <h4>Income: {{expensesList?.incomes}}</h4>
+                <h4>Outgoings: - {{expensesList?.outgoings}}</h4>
+                <h4 id="summary">Summary: {{expensesList?.monthlyResult}}</h4>
             </div> 
         </div>
-        <div class="MonthlySummary" style="width: 800px;">
-            <h3>Current month expenses</h3>
-            <div class="MonthlySummary-A" style="width: 750px; height: 400px;">
+        <div class="MonthlySummary">
+            <h2>Current month expenses</h2>
+            <div class="MonthlySummary-A">
+                <h3>{{currMonth}}</h3>
                 <div class="MonthlySummary-Cat">
-                    <h4>{{currMonth}}</h4>
                     <canvas id="MonthExpensesChart"></canvas>
                 </div>   
             </div>         
         </div>
         <div class="MonthlySummary">
-            <h3>Current week expenses</h3>
+            <h2>Current week expenses</h2>
             <div class="MonthlySummary-A">
+                <h3>{{currWeek}}</h3>
                 <div class="MonthlySummary-Week">
-                    <h4>{{currWeek}}</h4>
                     <canvas id="WeekExpensesChart"></canvas>
                 </div> 
             </div>  
             <div class="MonthlySummary-C">
-                <h5>Total expenses in week: {{weeklyExpenses}} PLN</h5>
+                <h4>Total expenses in this week: {{weeklyExpenses.toFixed(2)}} PLN</h4>
             </div> 
         </div>
-        <hr/>
-    </div> 
-    <div class="container" style="margin-bottom: 100px;">
-        <div class="MonthlySummary" style="margin-left: -20px; width: 1000px;" >
-            <h3>Monthly goals</h3>
-            <div class="MonthlySummary-A" style="width: 950px; height: 500px;">               
+        <div class="MonthlySummary" id="chartHeight">
+            <h2>Monthly goals</h2>
+            <div class="MonthlySummary-A" >   
+                <h3>{{currMonth}}</h3>            
                 <div class="MonthlySummary-Cat">
-                    <h4>{{currMonth}}</h4>
-                    <div class="text-center" style="height: 100px !important;" id="goalCharts"> 
+                    <div id="chart" style="margin-left:2%; width: 93%;">
                     </div>
+                    <!-- <div class="text-center" style="height: 100px !important;" id="goalCharts"> 
+                    </div> -->
                 </div>
             </div>  
         </div>
-        AAAAAA
-        AAAAAAAA
-        AAAAAA
-    </div>
+    </div> 
 </div>
 

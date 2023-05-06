@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../AuthService';
 import { RoutingService } from '../RoutingService';
@@ -15,62 +15,69 @@ export class NavbarHomeComponent implements OnInit {
 
   constructor(
     private route: Router,
-    private router: ActivatedRoute,
     private routing: RoutingService,
+    private eventSubscriber: ActivatedRoute,
     private auth: AuthService
   ) {
     route.events.subscribe((event) => {
       this.showSidenav = false;
       this.Navbar();
     });
-  }
 
-  ngOnInit(): void {
-    this.routing.getUserInfo().subscribe((value: boolean) => {
-      this.IsUserLogged = value;
+    this.eventSubscriber.queryParams.subscribe((event) => {
+
+      this.routing.getUserInfo().subscribe((value: boolean) => {
+        this.IsUserLogged = value;
+
+        if (this.IsUserLogged) {
+          this.routing.getUserName().subscribe((value: string) => {
+            this.LoggedUserName = value;
+          });
+        }
+      });
     });
-
-    if (this.IsUserLogged) {
-      this.routing.getUserName().subscribe((value: string) => {
-        this.LoggedUserName = value;
-      });
-    }
   }
 
-  ngOnChanges() {
-    if (this.IsUserLogged) {
-      this.routing.getUserName().subscribe((value: string) => {
-        this.LoggedUserName = value;
-      });
-    }
+
+  ngOnInit() {
+    const name = this.auth.GetUserContext();
+   if(name){
+    this.IsUserLogged = true;
+    this.LoggedUserName = name;
+   }
+   else{
+    this.IsUserLogged = false;
+   }
   }
 
   Navbar() {
     var a = document.getElementsByClassName('sidenav')[0] as HTMLElement;
-    var main = document.getElementsByClassName(
-      'MainWindow-View'
-    )[0] as HTMLElement;
+    var main = document.getElementsByClassName('MainWindow-View')[0] as HTMLElement;
 
     if (this.route.url.indexOf('id') !== -1) {
     }
 
-    if (this.showSidenav == false) {
-      a.setAttribute('style', 'width: 0');
-      main.setAttribute('style', 'margin-left: 0');
-
+    if (this.showSidenav === false) {
+      if(a !== null && main !== null){
+        a?.setAttribute('style', 'width: 0');
+        main?.setAttribute('style', 'margin-left: 0');
+      }
+    
       this.showSidenav = true;
     } else {
-      a.setAttribute('style', 'width: 270px');
-      main.setAttribute('style', 'margin-left: 270px');
-
+      if(a !== null && main !== null){
+        a?.setAttribute('style', 'width: 270px');
+        main?.setAttribute('style', 'margin-left: 270px');
+      }
+     
       this.showSidenav = false;
-      //(<HTMLInputElement>document.getElementById('mySearch')).value = '';
     }
   }
 
   Logout() {
     if (confirm('Are you sure to logout?')) {
       this.auth.RemoveToken();
+      this.auth.RemoveUserContext();
       this.routing.setUserInfo(false);
       this.route.navigate(['']);
     }

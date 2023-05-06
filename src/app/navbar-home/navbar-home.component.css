@@ -1,6 +1,7 @@
 .navbar-expenses {
   height: 80px;
   position: fixed;
+  /* position: relative; */
   width: 100%;
   background: rgb(63,94,251);
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(89,4,69,1) 0%, rgba(75,3,143,1) 100%);
@@ -21,13 +22,20 @@
   /* white-space: nowrap; */
 }
 
-.sidenavBtn:hover {
-  /* background-color: rgb(75,3,143); */
-  /* box-shadow:0 8px 16px 0 rgba(252, 200, 200, 0.2),0 6px 20px rgba(255, 238, 238, 0.2); */
-}
-
 .sidenavBtn:active{
   background-color: rgb(57, 2, 109);
   border-radius: 20px;
+}
+
+.navbar-logout{
+  padding-left: 10px; 
+  color: black; 
+  font-size: 1.4rem; 
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.navbar-logout:hover{
+  color: red;
 }
 

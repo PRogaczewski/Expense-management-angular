@@ -10,6 +10,8 @@
                     <input class="AuthenticationContainer__input" type="text" placeholder="Username" formControlName="name" required/>
                     <div *ngIf="registerGroup.controls['name'].invalid && form.submitted">
                         <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['name'].errors?.['required']">Username is required</span>
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['name'].errors?.['maxlength']">Maximum name length is 20</span>
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['name'].errors?.['minlength']">Minimum name length is 5</span>
                     </div>
                     </div>       
                 <div>
@@ -17,8 +19,10 @@
                         <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
                       </svg>
                     <input class="AuthenticationContainer__input" type="password" placeholder="Password" formControlName="password" required/>
-                    <div *ngIf="registerGroup.controls['password'].invalid && form.submitted">
+                    <div *ngIf="registerGroup.controls['password'].invalid&& form.submitted">
                         <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['password'].errors?.['required']">Password is required</span>
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['password'].errors?.['maxlength']">Maximum password length is 35</span>
+                        <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['password'].errors?.['minlength']">Minimum password length is 8</span>
                     </div>
                 </div>
                 <div>
@@ -30,6 +34,9 @@
                         <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.errors?.['confirmedValidator']">Passwords must be the same</span>
                         <span style="color:red; display: flex; padding-left: 22%;" *ngIf="registerGroup.controls['confirmedPassword'].errors?.['required']">Password is required</span>
                     </div>
+                </div>
+                <div *ngIf="registerGroup.errors?.['unexpected']">
+                    <span style="color:red; display: flex; padding-left: 22%;">Unexpected error occurred</span>
                 </div>
                 <div>
                     <button class="AuthenticationContainer__button" type="submit">Register</button>

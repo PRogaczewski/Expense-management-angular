@@ -1,6 +1,5 @@
-import { NONE_TYPE } from '@angular/compiler';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   BarController,
   PieControllerChartOptions,
@@ -19,6 +18,7 @@ import {
   ChartConfiguration,
   BubbleController,
 } from 'chart.js';
+import { AuthService } from 'src/app/AuthService';
 import { ApiService } from 'src/app/services/api.service';
 import { __values } from 'tslib';
 import { AddUserMonthlyGoalsComponent } from '../AddNew/add-user-monthly-goals/add-user-monthly-goals.component';
@@ -30,31 +30,65 @@ import { AddUserMonthlyGoalsComponent } from '../AddNew/add-user-monthly-goals/a
 })
 export class GetListComponent implements OnInit {
   expensesList: any;
-  monthlyCharts:any[]=[];
+  monthlyCharts: any[] = [];
 
-  currMonth = new Date().toLocaleString('default', { month: 'long' }) + ' ' + new Date().getFullYear().toString();
-  colors: any[]=['rgb(28, 185, 28)','rgb(232, 9, 240)', 'rgb(239, 240, 9)', 'rgb(245, 154, 18)', 'rgb(240, 9, 9)', 'rgb(174, 9, 240)', 'rgb(92, 228, 148)', 'rgb(3, 5, 124)', 'rgb(48, 116, 65)', 'rgb(153, 144, 65)', 'rgb(4, 35, 211)', 'rgb(165, 5, 93)',  'rgb(248, 162, 92)', 'rgb(138, 230, 95)', 'rgb(98, 243, 243)', 'rgb(122, 35, 122)', 'rgb(81, 107, 179)', 'rgb(128, 44, 44)', 'rgb(133, 175, 35)'];
+  currMonth =
+    new Date().toLocaleString('default', { month: 'long', year: 'numeric' })
 
-  curr = new Date;
-  first = this.curr.getDate() - this.curr.getDay() + (this.curr.getDay()===0 ? -6:1);
+  colors: string[] = [
+    'rgb(28, 185, 28)',
+    'rgb(232, 9, 240)',
+    'rgb(239, 240, 9)',
+    'rgb(245, 154, 18)',
+    'rgb(240, 9, 9)',
+    'rgb(174, 9, 240)',
+    'rgb(92, 228, 148)',
+    'rgb(3, 5, 124)',
+    'rgb(48, 116, 65)',
+    'rgb(153, 144, 65)',
+    'rgb(4, 35, 211)',
+    'rgb(165, 5, 93)',
+    'rgb(248, 162, 92)',
+    'rgb(138, 230, 95)',
+    'rgb(98, 243, 243)',
+    'rgb(122, 35, 122)',
+    'rgb(81, 107, 179)',
+    'rgb(128, 44, 44)',
+    'rgb(133, 175, 35)',
+  ];
+
+  curr = new Date();
+  first =
+    this.curr.getDate() -
+    this.curr.getDay() +
+    (this.curr.getDay() === 0 ? -6 : 1);
 
   last = this.first + 6;
 
-  firstday = new Date(this.curr.setDate(this.first)).toLocaleString('default', {day: '2-digit'});
-  lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {day: '2-digit'});
-  currWeek = this.firstday + ' - ' + this.lastday + '.' + (new Date().getMonth() + 1).toString();
+  firstday = new Date(this.curr.setDate(this.first)).toLocaleString('default', {
+    day: '2-digit',
+  });
+  lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {
+    day: '2-digit',
+  });
+  month =
+    parseInt(this.lastday) > parseInt(this.firstday) || this.curr.getDay() >= 0
+      ? new Date().getMonth() + 1
+      : new Date().getMonth() + 2;
+  currWeek = this.firstday + ' - ' + this.lastday + '.' + this.month.toString();
 
   currentId?: number;
-  isMonthlyGoal:boolean = false;
-  isCompareMonths:boolean = false;
+  isMonthlyGoal: boolean = false;
+  isCompareMonths: boolean = false;
   weeklyExpenses: number = 0;
 
-  @ViewChild(AddUserMonthlyGoalsComponent) monthlyGoalsComponent:any;
+  @ViewChild(AddUserMonthlyGoalsComponent) monthlyGoalsComponent: any;
 
   constructor(
     private service: ApiService,
-    //private nav: NavbarHomeComponent,
+    private route: Router,
     private currRoute: ActivatedRoute,
+    private auth: AuthService
   ) {
     Chart.register(
       BarElement,
@@ -71,40 +105,58 @@ export class GetListComponent implements OnInit {
     );
   }
 
-  async InitializeValues(){
+  async InitializeValues() {
     let id = this.currRoute.snapshot.paramMap.get('id');
+    this.currentId = parseInt(id!);
+
     await this.GetExpensesList(parseInt(id!));
 
-    this.SummaryChart();
-    this.CurrentWeekExpensesChart();
-    this.CurrentMonthByCategoriesChart();
-    this.MonthlyGoals(); 
+    if(this.expensesList !== undefined){
+      this.SummaryChart();
 
-    this.currentId=parseInt(id!);
+      if(Object.keys(this.expensesList.currentWeekByCategories).length > 0){
+        this.CurrentWeekExpensesChart();
+      }
+      
+      if(Object.keys(this.expensesList.totalMonthByCategories).length > 0){
+        this.CurrentMonthByCategoriesChart();
+      }
+      
+      if(Object.keys(this.expensesList.userGoals).length > 0){
+        this.MonthlyGoals();
+      }
+    }
   }
 
   async ngOnInit() {
-
+    if (!this.auth.GetUserContext()) {
+      console.log('user not authenticated');
+      this.route.navigate(['']);
+    }
     await this.InitializeValues();
-    
-    if(this.curr.getDate() >= 25 && this.expensesList.userGoals != null){
+
+    if (this.curr.getDate() >= 25 && this.expensesList.userGoals != null) {
     }
   }
 
   async GetExpensesList(id: number) {
-    await this.service.GetExpensesList(id).then((res) => {
-      console.log(res.data);
-      this.expensesList = res.data;
-    });
+    try {
+      await this.service.GetExpensesList(id).then((res) => {
+        this.expensesList = res.data;
+      });
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  SummaryChart(){
+  SummaryChart() {
     var pieChartResult;
 
-    if (this.expensesList.monthlyResult < 0) {
+    if (this.expensesList === undefined || this.expensesList.monthlyResult < 0) {
       pieChartResult = 0;
       var summary = document.getElementById('summary') as HTMLElement;
-      summary.setAttribute('style', 'color: red')
+      summary.setAttribute('style', 'color: red');
     } else {
       pieChartResult = this.expensesList.monthlyResult;
     }
@@ -116,10 +168,7 @@ export class GetListComponent implements OnInit {
         datasets: [
           {
             label: 'Weekly summary',
-            data: [
-              pieChartResult,
-              this.expensesList.outgoings,
-            ],
+            data: [pieChartResult, this.expensesList.outgoings],
             backgroundColor: ['#1fd655', 'rgb(255, 99, 132)'],
             hoverOffset: 4,
           },
@@ -128,9 +177,9 @@ export class GetListComponent implements OnInit {
     });
   }
 
-  CurrentMonthByCategoriesChart(){
-    const labels: any[]=[];
-    const data: any[]=[];
+  CurrentMonthByCategoriesChart() {
+    const labels: any[] = [];
+    const data: any[] = [];
 
     Object.entries(this.expensesList.totalMonthByCategories).forEach(
       ([key, value]) => {
@@ -152,29 +201,28 @@ export class GetListComponent implements OnInit {
           },
         ],
       },
-      options:{
-        plugins:{
-          legend:{
-            display:false,
+      options: {
+        plugins: {
+          legend: {
+            display: false,
           },
-      }
-    },
+        },
+      },
     });
   }
 
-  CurrentWeekExpensesChart(){
-    const labels: any[]=[];
-    const data: any[]=[];
+  CurrentWeekExpensesChart() {
+    const labels: any[] = [];
+    const data: any[] = [];
 
     Object.entries(this.expensesList.currentWeekByCategories).forEach(
       ([key, value]) => {
         labels.push(key);
         data.push(value);
 
-        if(typeof value==='number'){
+        if (typeof value === 'number') {
           this.weeklyExpenses += value;
         }
-        
       }
     );
 
@@ -194,90 +242,106 @@ export class GetListComponent implements OnInit {
     });
   }
 
-  MonthlyGoals(){
-    
-    var maxValue:number = 0;
-    const enumColors =['rgb(28, 185, 28)', 'rgb(245, 154, 18)', 'rgb(240, 9, 9)'];
+  MonthlyGoals() {
+    var maxValue: number = 0;
+    const enumColors = [
+      'rgb(28, 185, 28)',
+      'rgb(245, 154, 18)',
+      'rgb(240, 9, 9)',
+    ];
 
-    let getColors: any = enumColors[2];
+    let elementHeight = document.getElementById('chartHeight') as HTMLInputElement;
 
     Object.entries(this.expensesList.userGoals).forEach(
       ([secKey, secValue]) => {
-
-        if((secKey in this.expensesList.userExpenses)==false){
+        if (secKey in this.expensesList.userExpenses == false) {
           this.expensesList.userExpenses[secKey] = 0;
         }
 
-        const labels: any[]=[];
-        const data: any[]=[];
+        const labels: any[] = [];
+        const data: any[] = [];
 
         labels.push(secKey);
 
         Object.entries(this.expensesList.userExpenses).forEach(
           ([key, value]) => {
-            if(key === secKey){
-              if(typeof value === 'number' && typeof secValue === 'number') {
-
+            if (key === secKey) {
+              if (typeof value === 'number' && typeof secValue === 'number') {
                 data.push(value);
                 maxValue = secValue;
+                let getColors: string = enumColors[2];
 
-                  if(value <= secValue*0.6){
-                    getColors = enumColors[0];
-                  }
-                  else if(value <= secValue*0.9){
-                    getColors = enumColors[1];
-                  }
+                if (value <= secValue * 0.6) {
+                  getColors = enumColors[0];
+                } else if (value <= secValue * 0.9) {
+                  getColors = enumColors[1];
+                }
 
-                    var canvas = document.createElement('canvas'),
-                    chartId = 'chart' + secKey.toString();
-                    canvas.id = chartId;
-                    document.getElementById("goalCharts")?.appendChild(canvas)
-                    var element = document.getElementById(chartId)! as HTMLCanvasElement;
-                    var context = element.getContext('2d')!;
+                let barPr: number;
+                barPr = Math.round((value / secValue) * 100 * 100) / 100;
 
-                    var newChart = new Chart(context, {
-                      type: 'bar',
-                      data: {
-                            labels: labels,
-                            datasets: [{
-                                indexAxis: 'y',
-                                data: data,
-                                backgroundColor: getColors,
-                                barThickness: 15,
-                                borderWidth: 1,
-                              }],
-                          },
-                      options:{
-                            indexAxis: 'y',
-                            maintainAspectRatio: false,
-                            plugins:{
-                              legend:{
-                                display:false,
-                              },
-                            },
-                            scales:{
-                              x:{
-                                min: 0,
-                                max: maxValue,
-                                ticks:{
-                                  maxTicksLimit: 3,
-                                  callback(tickValue, index, ticks) {
-                                    if(index === 2){
-                                      return tickValue + '.00 PLN Limit';
-                                    }
-                                    else if(index == 1){
-                                      return value + ' PLN';
-                                    }
-                                    return tickValue + '.00 PLN';
-                                  },
-                                }
-                              }
-                            },
-                          }
-                    })
+                let maxPr = barPr > 100 ? 100 : barPr;
+                let element = document.getElementById('chart') as HTMLInputElement;
+                
+                elementHeight.style.height +=650;
+
+                if (element != null) {
+                  const mainLabel = document.createElement('h5');
+
+                  mainLabel.textContent = key + ' ' + barPr + '%';
+                  mainLabel.className = 'category';
+
+                  const firstDiv = document.createElement('div');
+                  firstDiv.style.background = 'rgb(226, 226, 226)';
+                  firstDiv.style.width = '100%';
+                  firstDiv.style.height = '30px';
+
+                  const innerWrapper = document.createElement('div');
+                  innerWrapper.style.height = '30px';
+                  innerWrapper.style.width = `${maxPr}%`;
+                  innerWrapper.style.backgroundColor = getColors;
+                  firstDiv.appendChild(innerWrapper);
+
+                  const labelWrapper = document.createElement('div');
+                  labelWrapper.style.marginTop = '1%';
+
+                  const label1 = document.createElement('label');
+                  label1.style.width = '33.33%';
+                  label1.style.textAlign = 'left';
+                  label1.textContent = '0,00 PLN';
+                  labelWrapper.appendChild(label1);
+
+                  const label2 = document.createElement('label');
+                  label2.style.width = '33.33%';
+                  label2.style.textAlign = 'center';
+                  label2.textContent = `${value} PLN`;
+                  labelWrapper.appendChild(label2);
+
+                  const label3 = document.createElement('label');
+                  label3.style.width = '33.33%';
+                  label3.style.textAlign = 'right';
+                  label3.textContent = `${secValue} PLN`;
+                  labelWrapper.appendChild(label3);
+                  const remainingAmount = document.createElement('label');
+                  remainingAmount.style.fontSize = '1.1rem';
+                  remainingAmount.textContent = `Remaining amount: ${secValue - value} PLN`;
+
+                  element.appendChild(mainLabel);
+                  element.appendChild(firstDiv);
+                  element.appendChild(labelWrapper);
+                  element.appendChild(remainingAmount);
+                  element.appendChild(document.createElement('hr'));
+                }
               }
             }
-          });   
-      });
+          }
+        );
+      }
+    );
+    const lastHrEl = document.getElementById('chart');
+
+    if (lastHrEl != null && lastHrEl.lastChild!.nodeName === 'HR') {
+      lastHrEl.removeChild(lastHrEl.lastChild!);
+    }
   }
 }

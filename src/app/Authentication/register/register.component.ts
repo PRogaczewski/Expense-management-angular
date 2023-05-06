@@ -27,8 +27,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      password: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(35)]],
       confirmedPassword: ['', Validators.required],
     });
   }
@@ -41,25 +41,28 @@ export class RegisterComponent implements OnInit {
         confirmedPassword: this.getComponents['confirmedPassword'].value,
       };
 
-      if(registerModel.password !== registerModel.confirmedPassword){
-        this.registerGroup.setErrors({confirmedValidator: true});
-      }else{
-        const model = await this.service.Register(registerModel);
+      this.CheckPasswordComponent(registerModel);
+      this.CheckNameComponent(registerModel);
 
-        if(model.status==200){
+      if(!this.registerGroup.errors){
+        try{
+          const model = await this.service.Register(registerModel);
+
+        if(model.status === 200){
           this.routing.setUserInfo(true);
           this.routing.setUserName(model.data.name);
   
           this.auth.SetToken(model.data.token);
+          this.auth.SetUserContext(model.data.name);
           this.route.navigate([''])
         }
-        else{
-          console.log(model.status)
+        }
+        catch(err){
+            this.registerGroup.setErrors({unexpected: true});
         }
       }
     }
     else{
-      console.log("errrrr")
       console.log(this.registerGroup.errors)
     }
   }
@@ -67,5 +70,26 @@ export class RegisterComponent implements OnInit {
   Login() {
     this.routing.setData(true);
     this.route.navigate(['/Authentication']);
+  }
+
+  CheckPasswordComponent(model: any): void{
+    if(model.password !== model.confirmedPassword){
+      this.registerGroup.setErrors({confirmedValidator: true});
+    }
+    if(model.password.length > 35){
+      this.registerGroup.setErrors({maxPassLengthValidator: true});
+    }
+    if(model.password.length < 8){
+      this.registerGroup.setErrors({minPassLengthValidator: true});
+    }
+  }
+
+  CheckNameComponent(model: any): void{
+    if(model.name.length > 20){
+      this.registerGroup.setErrors({maxNameLengthValidator: true});
+    }
+    if(model.name.length < 5){
+      this.registerGroup.setErrors({minNameLengthValidator: true});
+    }
   }
 }

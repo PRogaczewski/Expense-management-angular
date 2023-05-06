@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GetListsComponent } from './ExpensesLists/get-lists/get-lists.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { GetListComponent } from './ExpensesList/get-list/get-list.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarHomeComponent } from './navbar-home/navbar-home.component';
@@ -16,7 +16,7 @@ import { AddUserMonthlyGoalsComponent } from './ExpensesList/AddNew/add-user-mon
 import { LoginComponent } from './Authentication/login/login.component';
 import { RegisterComponent } from './Authentication/register/register.component';
 import { AuthenticationComponent } from './Authentication/authentication/authentication.component';
-import { RoutingService } from './RoutingService';
+import { DeleteListComponent } from './ExpensesList/delete-list/delete-list.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +32,7 @@ import { RoutingService } from './RoutingService';
     LoginComponent,
     RegisterComponent,
     AuthenticationComponent,
+    DeleteListComponent,
   ],
   imports: [
     BrowserModule,

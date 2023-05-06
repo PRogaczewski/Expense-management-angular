@@ -16,42 +16,15 @@
           title="Type in a category"
         />
         <hr />
+        <div *ngIf="AnyList" style="margin-left:5px;font-size: 1.1rem;">
+          You don`t have any expense list...
+        </div>
         <div class="sidenav-scrollbar">
           <div *ngFor="let item of expensesLists" id="expensesLists">
             <a style="margin-left: -10px;" *ngIf="searchedText === '' || item.name.toUpperCase().includes(searchedText)" (click)="GetExpensesList(item.id)">{{ item.name }}</a> 
           </div>
         </div>
       </div>
-    
-    <div id="mySidenav" class="sidenav" mode="side"  *ngIf="userNavbar">
-      <a href="/" style="padding-top: 20px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-door-closed-fill" viewBox="0 0 18 18">
-          <path id="close" d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-          <path id="open" d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
-        </svg>
-      Home page</a>
-      <hr/>
-      <div class="AnalysisComponents">
-        <a data-bs-toggle="modal" data-bs-target="#incomeModal" style="margin-left: -5%;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
-            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-          </svg>Add income</a>
-        <a data-bs-toggle="modal" data-bs-target="#expenseModal" style="margin-left: -5%;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
-            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-          </svg>Add new expense</a>
-        <a data-bs-toggle="modal" data-bs-target="#userGoalsModal" style="margin-left: -5%;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
-            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-          </svg>Add new monthly goal</a>
-        <hr/>
-        <a>Your monthly goal</a>
-        <a>Total expenses in month by categories</a>
-        <a>Total expenses in year by categories</a>
-        <a>Comapre two months</a>
-        <a>Compare two years</a>
-      </div>
-    </div>
   </div>
 
   <div *ngIf="!IsUserLogged">
@@ -59,6 +32,39 @@
       <button class="navbar--button" (click)="Login()">Login</button>
       <button class="navbar--button" (click)="Register()">Register</button>
     </div>
+  </div>
+</div>
+
+<div id="mySidenav" class="sidenav" mode="side" *ngIf="userNavbar && IsUserLogged">
+  <a href="/" style="padding-top: 20px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-door-closed-fill" viewBox="0 0 18 18">
+      <path id="close" d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+      <path id="open" d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
+    </svg>
+  Home page</a>
+  <hr/>
+  <div class="AnalysisComponents">
+    <a data-bs-toggle="modal" data-bs-target="#incomeModal" style="margin-left: -7%;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>Add income</a>
+    <a data-bs-toggle="modal" data-bs-target="#expenseModal" style="margin-left: -7%;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>Add new expense</a>
+    <a data-bs-toggle="modal" data-bs-target="#userGoalsModal" style="margin-left: -7%;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 15 20" style="font-weight: bold;">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>Add new monthly goal</a>
+    <hr/>
+    <a>Total expenses in month by categories</a>
+    <a>Total expenses in year by categories</a>
+    <a>Compare (in progress)</a>
+    <hr/>
+    <a data-bs-toggle="modal" data-bs-target="#deleteModal" style="margin-left: -7%;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 15 20">
+        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+      </svg>Delete current list</a>
   </div>
 </div>
 
