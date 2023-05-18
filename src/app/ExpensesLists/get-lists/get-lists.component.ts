@@ -1,8 +1,6 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthService } from 'src/app/AuthService';
-import { GetListComponent } from 'src/app/ExpensesList/get-list/get-list.component';
 import { RoutingService } from 'src/app/RoutingService';
 import { ApiService } from 'src/app/services/api.service';
 

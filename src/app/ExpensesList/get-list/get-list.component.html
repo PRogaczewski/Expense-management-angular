@@ -1,12 +1,12 @@
-<app-add-expense [listId]="currentId"></app-add-expense>
-<app-add-income [listId]="currentId"></app-add-income>
+<app-add-expense [listId]="currentId" (getlistComponent)="UpdateCharts($event)"></app-add-expense>
+<app-add-income [listId]="currentId" (getlistComponent)="UpdateCharts($event)"></app-add-income>
 <app-add-user-monthly-goals [listId]="currentId"></app-add-user-monthly-goals>
 <app-delete-list [listId]="currentId"></app-delete-list>
 
 <div class="MainWindow-View"> 
     <div class="row justify-content-center" style="margin-left: 0%; width: 100%;">
         <div class="MonthlySummary">
-            <h2>Summary</h2>
+            <h2>Income and outgoings summary</h2>
             <div class="MonthlySummary-A">
                 <h3>{{currMonth}}</h3>
                 <div class="MonthlySummary-B">
@@ -14,22 +14,38 @@
                 </div>
             </div>  
             <div class="MonthlySummary-C" style="text-align: left;">
-                <h4>Income: {{expensesList?.incomes}}</h4>
-                <h4>Outgoings: - {{expensesList?.outgoings}}</h4>
-                <h4 id="summary">Summary: {{expensesList?.monthlyResult}}</h4>
+                <h4>Income: {{expensesList?.incomes}} PLN</h4>
+                <h4>Outgoings: - {{expensesList?.outgoings}} PLN</h4>
+                <h4 id="summary">Summary: {{expensesList?.monthlyResult}} PLN</h4>
             </div> 
         </div>
         <div class="MonthlySummary">
-            <h2>Current month expenses</h2>
+            <h2>Monthly expenses summary</h2>
+            <div style="float: right">
+                <form [formGroup]="SelectMonthSummaryForm">
+                    <select formControlName="month" (change)="GetCurrentMonth()" id="monthChosenForGoal" class="form-select" aria-label="Default select example">
+                        <option *ngFor="let type of months| keyvalue" [ngValue]="+type.key">{{type.value}}</option>
+                      </select>
+                </form>
+            </div>
             <div class="MonthlySummary-A">
                 <h3>{{currMonth}}</h3>
+                <h4>Compared to previous month: {{prevMonth}} PLN
+                    <svg *ngIf="!isBetterMonth" xmlns="http://www.w3.org/2000/svg" width="28" height="27" fill="red" class="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                      </svg>
+
+                      <svg *ngIf="isBetterMonth" xmlns="http://www.w3.org/2000/svg" width="28" height="27" fill="rgb(119, 206, 0)" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0v6z"/>
+                      </svg>
+                </h4>
                 <div class="MonthlySummary-Cat">
                     <canvas id="MonthExpensesChart"></canvas>
                 </div>   
             </div>         
         </div>
         <div class="MonthlySummary">
-            <h2>Current week expenses</h2>
+            <h2>Weekly expenses summary</h2>
             <div class="MonthlySummary-A">
                 <h3>{{currWeek}}</h3>
                 <div class="MonthlySummary-Week">
@@ -47,8 +63,6 @@
                 <div class="MonthlySummary-Cat">
                     <div id="chart" style="margin-left:2%; width: 93%;">
                     </div>
-                    <!-- <div class="text-center" style="height: 100px !important;" id="goalCharts"> 
-                    </div> -->
                 </div>
             </div>  
         </div>

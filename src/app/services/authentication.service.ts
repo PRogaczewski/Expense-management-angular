@@ -6,7 +6,9 @@ import axios from 'axios';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  readonly AuthenticationApiUrl="https://localhost:7165/";
+  readonly port = "5800"
+  //7165
+  readonly AuthenticationApiUrl="https://localhost:" + this.port + "/";
 
   constructor(private httpClient:HttpClient) { }
 

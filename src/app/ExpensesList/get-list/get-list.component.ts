@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BarController,
-  PieControllerChartOptions,
   BarElement,
   CategoryScale,
   Chart,
@@ -12,16 +11,15 @@ import {
   LinearScale,
   Title,
   Tooltip,
-  registerables,
   PieController,
   ArcElement,
-  ChartConfiguration,
-  BubbleController,
 } from 'chart.js';
 import { AuthService } from 'src/app/AuthService';
 import { ApiService } from 'src/app/services/api.service';
 import { __values } from 'tslib';
 import { AddUserMonthlyGoalsComponent } from '../AddNew/add-user-monthly-goals/add-user-monthly-goals.component';
+import { HelperService } from 'src/app/HelperService';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-get-list',
@@ -32,8 +30,9 @@ export class GetListComponent implements OnInit {
   expensesList: any;
   monthlyCharts: any[] = [];
 
-  currMonth =
-    new Date().toLocaleString('default', { month: 'long', year: 'numeric' })
+  currMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' })
+  prevMonth: number = 0;
+  isBetterMonth: boolean = false;
 
   colors: string[] = [
     'rgb(28, 185, 28)',
@@ -58,19 +57,11 @@ export class GetListComponent implements OnInit {
   ];
 
   curr = new Date();
-  first =
-    this.curr.getDate() -
-    this.curr.getDay() +
-    (this.curr.getDay() === 0 ? -6 : 1);
-
+  first = this.curr.getDate() - this.curr.getDay() + (this.curr.getDay() === 0 ? -6 : 1);
   last = this.first + 6;
 
-  firstday = new Date(this.curr.setDate(this.first)).toLocaleString('default', {
-    day: '2-digit',
-  });
-  lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {
-    day: '2-digit',
-  });
+  firstday = new Date(this.curr.setDate(this.first)).toLocaleString('default', {day: '2-digit',});
+  lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {day: '2-digit',});
   month =
     parseInt(this.lastday) > parseInt(this.firstday) || this.curr.getDay() >= 0
       ? new Date().getMonth() + 1
@@ -82,13 +73,22 @@ export class GetListComponent implements OnInit {
   isCompareMonths: boolean = false;
   weeklyExpenses: number = 0;
 
+  summaryChart!: Chart<"pie", any[], string>;
+  monthSummaryChart!: Chart<"bar", any[], string>;
+  weekSummaryChart!: Chart<"doughnut", any[], string>;
+
+  months:Map<number,string> = new Map;
+  SelectMonthSummaryForm!: FormGroup;
+
   @ViewChild(AddUserMonthlyGoalsComponent) monthlyGoalsComponent: any;
 
   constructor(
+    private formBuilder: FormBuilder,
     private service: ApiService,
     private route: Router,
     private currRoute: ActivatedRoute,
-    private auth: AuthService
+    private auth: AuthService,
+    private helper: HelperService
   ) {
     Chart.register(
       BarElement,
@@ -103,7 +103,15 @@ export class GetListComponent implements OnInit {
       Title,
       Tooltip
     );
+
+    this.helper.GetMonths().subscribe((data)=>{
+      this.months = data;
+    })
   }
+
+get components(){
+  return this.SelectMonthSummaryForm.controls;
+}
 
   async InitializeValues() {
     let id = this.currRoute.snapshot.paramMap.get('id');
@@ -112,16 +120,27 @@ export class GetListComponent implements OnInit {
     await this.GetExpensesList(parseInt(id!));
 
     if(this.expensesList !== undefined){
+
+      this.prevMonth = this.expensesList.previousMonthResult - this.expensesList.outgoings;
+
+      if(this.prevMonth < 0){
+        this.prevMonth = this.prevMonth * -1
+        this.isBetterMonth = false;
+      }
+      else{
+        this.isBetterMonth = true;
+      }
+
       this.SummaryChart();
+
+      if(Object.keys(this.expensesList.totalMonthByCategories).length > 0){
+        this.CurrentMonthByCategoriesChart();
+      }
 
       if(Object.keys(this.expensesList.currentWeekByCategories).length > 0){
         this.CurrentWeekExpensesChart();
       }
-      
-      if(Object.keys(this.expensesList.totalMonthByCategories).length > 0){
-        this.CurrentMonthByCategoriesChart();
-      }
-      
+     
       if(Object.keys(this.expensesList.userGoals).length > 0){
         this.MonthlyGoals();
       }
@@ -129,14 +148,32 @@ export class GetListComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.SelectMonthSummaryForm = this.formBuilder.group({
+      month: new Date().getMonth()
+    });
+
     if (!this.auth.GetUserContext()) {
       console.log('user not authenticated');
       this.route.navigate(['']);
     }
     await this.InitializeValues();
+  }
 
-    if (this.curr.getDate() >= 25 && this.expensesList.userGoals != null) {
+  async GetCurrentMonth(){
+    let month = parseInt(this.components['month'].value) + 1;
+
+    try{
+        await this.service.GetExpensesInCurrentMonth(this.currentId!, month.toString()).then((res)=>{
+
+        this.expensesList.totalMonthByCategories = res.data.monthSummary;
+
+        this.monthSummaryChart.destroy();
+        this.CurrentMonthByCategoriesChart();
+      });
     }
+    catch(err){
+      console.log(err )
+    }   
   }
 
   async GetExpensesList(id: number) {
@@ -150,6 +187,34 @@ export class GetListComponent implements OnInit {
     }
   }
 
+  async UpdateCharts(id: number) {
+    await this.GetExpensesList(id);
+    var pieChartResult;
+    var summary = document.getElementById('summary') as HTMLElement;
+
+    if (this.expensesList === undefined || this.expensesList.monthlyResult < 0) {
+      pieChartResult = 0;
+      summary.setAttribute('style', 'color: red');
+    } else {
+      pieChartResult = this.expensesList.monthlyResult;
+      summary.setAttribute('style', 'color: black');
+    }
+    this.summaryChart.data.datasets[0].data[0] = pieChartResult;
+    this.summaryChart.data.datasets[0].data[1] = this.expensesList.outgoings;
+
+    this.summaryChart.update();
+
+    this.monthSummaryChart.destroy();
+    this.CurrentMonthByCategoriesChart();
+
+    this.weekSummaryChart.destroy();
+    this.CurrentWeekExpensesChart();
+
+    let element = document.getElementById('chart') as HTMLInputElement;
+    element.innerHTML = '';
+    this.MonthlyGoals();
+  }
+
   SummaryChart() {
     var pieChartResult;
 
@@ -161,7 +226,7 @@ export class GetListComponent implements OnInit {
       pieChartResult = this.expensesList.monthlyResult;
     }
 
-    var myChart = new Chart('PieChartSummary', {
+    this.summaryChart = new Chart('PieChartSummary', {
       type: 'pie',
       data: {
         labels: ['Summary', 'Outgoings'],
@@ -188,7 +253,7 @@ export class GetListComponent implements OnInit {
       }
     );
 
-    var myChart = new Chart('MonthExpensesChart', {
+    this.monthSummaryChart = new Chart('MonthExpensesChart', {
       type: 'bar',
       data: {
         labels: labels,
@@ -226,7 +291,7 @@ export class GetListComponent implements OnInit {
       }
     );
 
-    var myChart = new Chart('WeekExpensesChart', {
+    this.weekSummaryChart = new Chart('WeekExpensesChart', {
       type: 'doughnut',
       data: {
         labels: labels,
@@ -324,7 +389,7 @@ export class GetListComponent implements OnInit {
                   labelWrapper.appendChild(label3);
                   const remainingAmount = document.createElement('label');
                   remainingAmount.style.fontSize = '1.1rem';
-                  remainingAmount.textContent = `Remaining amount: ${secValue - value} PLN`;
+                  remainingAmount.textContent = `Remaining amount: ${(secValue - value).toFixed(2)} PLN`;
 
                   element.appendChild(mainLabel);
                   element.appendChild(firstDiv);

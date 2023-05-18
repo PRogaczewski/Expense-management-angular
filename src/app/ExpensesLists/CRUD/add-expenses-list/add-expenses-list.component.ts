@@ -33,7 +33,7 @@ export class AddExpensesListComponent implements OnInit {
       };
 
       try{
-        await this.service.createExpensesList(listName);
+        await this.service.CreateExpensesList(listName);
         this.route.navigate(['']);
       }
       catch(err){

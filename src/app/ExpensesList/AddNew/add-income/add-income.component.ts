@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit,Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -10,7 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 export class AddIncomeComponent implements OnInit {
   newIncomeForm!: FormGroup;
   submitted: boolean=false;
- @Input() listId?: number;
+  @Input() listId?: number;
+  @Output() public getlistComponent = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder, private service: ApiService) {}
 
@@ -25,16 +26,30 @@ export class AddIncomeComponent implements OnInit {
     });
   }
 
-  AddUserIncome() {
+  async AddUserIncome() {
     this.StringContainsComma(this.getComponents['income'].value)
 
     if (this.newIncomeForm.valid) {
       let income = {
         userExpensesListId: this.listId!,
         income: parseFloat(this.getComponents['income'].value)};
-       this.service.AddIncome(income);
 
-       window.location.reload();
+        try{
+          await this.service.AddIncome(income).then(()=>{
+            try{
+              this.getlistComponent.emit(this.listId)
+            }
+            catch(err){
+              console.log(err)
+            }
+          });
+
+          //window.location.reload();
+        }
+        catch(err){
+          console.log(err)
+        }
+      
     }
     else{
       this.submitted=true;

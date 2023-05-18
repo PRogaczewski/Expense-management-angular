@@ -7,9 +7,10 @@ import { AuthService } from '../AuthService';
   providedIn: 'root'
 })
 export class ApiService {
-readonly HomeApiUrl="https://localhost:7165/Home/";
-readonly AnalysisApiUrl = "https://localhost:7165/ExpensesList/"
-expensesLists=[];
+readonly port = "5800"
+//7165
+readonly HomeApiUrl="https://localhost:" + this.port + "/Home/";
+readonly AnalysisApiUrl = "https://localhost:" + this.port + "/ExpensesList/";
 categories=[];
 
   constructor(private httpClient:HttpClient, private authService: AuthService) {
@@ -32,17 +33,17 @@ categories=[];
 } 
 
   //Lists
+  //---------------------------------------
   async GetCategories(){
     const {data:categories} = await axios.get(this.HomeApiUrl + 'GetCategories');
     return categories;
   }
+
   async GetExpensesLists(){
-    // const{data:expensesLists} = await axios.get(this.HomeApiUrl);
     return await axios.get(this.HomeApiUrl);
-    //return expensesLists;
   }
 
-  async createExpensesList(name: any){
+  async CreateExpensesList(name: any){
     await axios.post(this.HomeApiUrl, name);
   }
 
@@ -51,8 +52,13 @@ categories=[];
   }
 
   //Expenses
+  //--------------------------------------
   async GetExpensesList(id: number){
     return await axios.get(this.AnalysisApiUrl + id);
+  }
+
+  async GetExpensesInCurrentMonth(id: number, month: string){
+    return await axios.get(this.AnalysisApiUrl + "TotalInMonthByCategories/" + id + "?month=" + month);
   }
 
   async AddIncome(income:any){

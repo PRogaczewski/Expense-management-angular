@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -14,6 +14,7 @@ export class AddExpenseComponent implements OnInit {
   submitted: boolean=false;
   success: boolean = false;
   @Input() listId?: number;
+  @Output() public getlistComponent = new EventEmitter();
   mappedCategoires = new Map();
 
   constructor(private formBuilder: FormBuilder, private service: ApiService) { }
@@ -35,7 +36,7 @@ export class AddExpenseComponent implements OnInit {
     this.mappedCategoires = new Map(this.categories.map((value, index) => [index, value]));
   }
 
-  NewExpense(){
+  async NewExpense(){
     this.submitted = true;
     this.StringContainsComma(this.getComponents['price'].value)
 
@@ -47,15 +48,27 @@ export class AddExpenseComponent implements OnInit {
         userExpensesListId: this.listId!
       };
   
-      this.service.AddExpense(expenseRequest);
-      this.success = true;
+      try{
+        await this.service.AddExpense(expenseRequest).then(()=>{
+          try {
+            this.getlistComponent.emit(this.listId)
+      
+          } catch (err) {
+            console.log(err);
+          }
+        });
 
-      this.newExpenseForm.reset();
-      this.submitted = false;
+        this.success = true;
+        this.newExpenseForm.reset();
+        this.submitted = false;
+      }
+      catch(err){
+        console.log(err);
+      }
+      
     }
     else{
       this.success = false;
-      console.log("error 'new expense'");
     }  
   }
 
