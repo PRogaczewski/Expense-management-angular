@@ -208,6 +208,7 @@ get components(){
     this.CurrentMonthByCategoriesChart();
 
     this.weekSummaryChart.destroy();
+    this.weeklyExpenses = 0;
     this.CurrentWeekExpensesChart();
 
     let element = document.getElementById('chart') as HTMLInputElement;
