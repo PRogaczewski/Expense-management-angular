@@ -64,8 +64,8 @@ export class GetListComponent implements OnInit {
   lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {day: '2-digit',});
   month =
     parseInt(this.lastday) > parseInt(this.firstday) || this.curr.getDay() >= 0
-      ? new Date().getMonth() + 1
-      : new Date().getMonth() + 2;
+      ? new Date().getMonth() + 2
+      : new Date().getMonth() + 1;
   currWeek = this.firstday + ' - ' + this.lastday + '.' + this.month.toString();
 
   currentId?: number;

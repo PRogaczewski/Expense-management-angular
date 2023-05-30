@@ -26,7 +26,6 @@ export class AddExpenseComponent implements OnInit {
     this.success = false;
 
     this.newExpenseForm = this.formBuilder.group({
-      name: ['', Validators.required],
       price: ['', Validators.required],
       category: [0, Validators.required],
     })
@@ -42,7 +41,6 @@ export class AddExpenseComponent implements OnInit {
 
     if(this.newExpenseForm.valid){
       let expenseRequest = {
-        name: this.getComponents['name'].value.toString(),
         category: parseInt(this.getComponents['category'].value),
         price: parseFloat(this.getComponents['price'].value),
         userExpensesListId: this.listId!

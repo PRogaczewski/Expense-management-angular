@@ -39,3 +39,13 @@
   color: red;
 }
 
+.navbar-account{
+  color: black; 
+  text-decoration: none !important;
+}
+
+.navbar-account:hover{
+  cursor: pointer;
+  color:white;
+}
+

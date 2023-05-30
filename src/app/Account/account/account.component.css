@@ -1,0 +1,19 @@
+.container {
+  margin-top: 5%;
+  top: 30%;
+  left: 50%;
+  display: block;
+  text-align: center;
+  width: 50%;
+}
+
+.container-inside {
+    margin:5%;
+}
+
+@media screen and (max-height: 900px) {
+    .container {
+      top: 30%;
+    }
+  }
+

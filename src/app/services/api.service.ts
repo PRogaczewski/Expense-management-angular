@@ -7,7 +7,7 @@ import { AuthService } from '../AuthService';
   providedIn: 'root'
 })
 export class ApiService {
-readonly port = "5800"
+readonly port = "5800" //docker
 //7165
 readonly HomeApiUrl="https://localhost:" + this.port + "/Home/";
 readonly AnalysisApiUrl = "https://localhost:" + this.port + "/ExpensesList/";

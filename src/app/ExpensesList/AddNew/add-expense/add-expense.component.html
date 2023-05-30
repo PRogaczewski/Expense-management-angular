@@ -9,12 +9,6 @@
         <form [formGroup]="newExpenseForm" (ngSubmit)="NewExpense()">
           <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
             <div class="modal-body">
-              <label >Name</label>
-                <input formControlName="name" class="form-control"
-                placeholder="Food" required/>
-                <span style="color:red" *ngIf="submitted && newExpenseForm.controls['name'].errors">Name is required</span>
-            </div>
-            <div class="modal-body">
               <label >Price</label>
                 <input formControlName="price" class="form-control"
                 placeholder="50.90" required/>

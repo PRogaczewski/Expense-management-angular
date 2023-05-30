@@ -74,6 +74,10 @@ export class NavbarHomeComponent implements OnInit {
     }
   }
 
+  Account(){
+    this.route.navigate(['/Account']);
+  }
+
   Logout() {
     if (confirm('Are you sure to logout?')) {
       this.auth.RemoveToken();

@@ -1,0 +1,52 @@
+<div class="MainWindow-View">
+  <div class="container">
+    <div class="container-inside">
+      <h2>Settings</h2>
+      <hr />
+      <div>
+        <button (click)="ChangePasswordSite()" class="btn btn-outline-dark">Change password</button>
+      </div>
+
+      <div id="changePass" style="display: none;">  
+        <form [formGroup]="changePassForm" #form="ngForm" (ngSubmit)="ChangePassword()">
+          <div>
+              <input class="AuthenticationContainer__input" type="text" placeholder="Current password" formControlName="oldPassword" required/>
+              <div *ngIf="changePassForm.controls['oldPassword'].invalid && form.submitted">
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['oldPassword'].errors?.['required']">Password is required</span>
+              </div>
+              </div>       
+          <div>
+              <input class="AuthenticationContainer__input" type="password" placeholder="New password" formControlName="newPassword" required/>
+              <div *ngIf="changePassForm.controls['newPassword'].invalid&& form.submitted">
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['newPassword'].errors?.['required']">New password is required</span>
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['newPassword'].errors?.['maxlength']">Maximum password length is 35</span>
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['newPassword'].errors?.['minlength']">Minimum password length is 8</span>
+              </div>
+          </div>
+          <div>
+              <input class="AuthenticationContainer__input" type="password" placeholder="Confirm your new password" formControlName="confirmedNewPassword" required/>
+              <div *ngIf="(changePassForm.controls['confirmedNewPassword'].invalid || changePassForm.errors?.['confirmedValidator']) && form.submitted">
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.errors?.['confirmedValidator']">Passwords must be the same</span>
+                  <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['confirmedNewPassword'].errors?.['required']">Confirmed password is required</span>
+              </div>
+          </div>
+          <div *ngIf="changePassForm.errors?.['unexpected']">
+              <span style="color:red; display: flex; padding-left: 22%;">Unexpected error occurred</span>
+          </div>
+          <div>
+              <button class="AuthenticationContainer__button" type="submit">Change password</button>
+          </div>
+      </form>
+      </div>
+    </div>
+
+    <div>
+      <h2 style="color: red">Delete account</h2>
+      <hr />
+      <div>
+        <h6>There is no going back...</h6>
+        <button (click)="DeleteAccount()" class="btn btn-outline-danger">Delete your account</button>
+      </div>
+    </div>
+  </div>
+</div>

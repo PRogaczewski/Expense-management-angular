@@ -17,7 +17,9 @@
   
     <div style="margin-right: 2%; display: flex;">
       <div style="display: inline-flex;" *ngIf="IsUserLogged">
-        <h4 style="color: black; font-size: 1.5rem;">Welcome {{LoggedUserName}} |</h4>
+        <h4 style="color: black; font-size: 1.5rem;">Welcome 
+          <a class="navbar-account" (click)="Account()" title="Your account">{{LoggedUserName}} </a>
+          |</h4>
         <a class="navbar-logout" (click)="Logout()">Logout</a>
       </div>
       <!-- <div >
