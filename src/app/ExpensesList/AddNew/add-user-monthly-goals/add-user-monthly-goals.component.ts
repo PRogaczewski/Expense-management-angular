@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HelperService } from 'src/app/HelperService';
@@ -17,6 +17,7 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
   submitted: boolean = false;
   success: boolean = false;
   isNotSuccessfully: boolean = false;
+  @Output() public getlistComponent = new EventEmitter();
 
   mappedCategoires = new Map();
 
@@ -84,11 +85,22 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
         monthChosenForGoal: newDate,
       };
 
-      if(await this.service.AddUserGoals(UserExpenseGoalDto)){
-        this.success = true;
-      }else{
+      try{
+        await this.service.AddUserGoals(UserExpenseGoalDto).then(()=>{
+          try{
+            this.getlistComponent.emit(this.listId);
+            this.success = true;
+          }
+          catch(err){
+            console.log(err);
+            this.isNotSuccessfully = true;
+          }    
+        });
+      }
+      catch(err){
+        console.log(err);
         this.isNotSuccessfully = true;
-      }  
+      }
 
       this.newUserGoalsForm.reset();
       this.submitted = false;

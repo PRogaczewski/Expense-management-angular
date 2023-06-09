@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
       }
       }
       catch(err){
+        console.log(err)
         if(err instanceof Error){
           this.loginGroup.setErrors({unexpected: true})
           console.log(err.message)

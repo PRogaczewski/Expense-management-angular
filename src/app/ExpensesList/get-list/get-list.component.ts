@@ -64,8 +64,8 @@ export class GetListComponent implements OnInit {
   lastday = new Date(this.curr.setDate(this.last)).toLocaleString('default', {day: '2-digit',});
   month =
     parseInt(this.lastday) > parseInt(this.firstday) || this.curr.getDay() >= 0
-      ? new Date().getMonth() + 2
-      : new Date().getMonth() + 1;
+      ? new Date().getMonth() + 1
+      : new Date().getMonth() + 0;
   currWeek = this.firstday + ' - ' + this.lastday + '.' + this.month.toString();
 
   currentId?: number;
@@ -124,7 +124,7 @@ get components(){
       this.prevMonth = this.expensesList.previousMonthResult - this.expensesList.outgoings;
 
       if(this.prevMonth < 0){
-        this.prevMonth = this.prevMonth * -1
+        this.prevMonth = (this.prevMonth * -1)
         this.isBetterMonth = false;
       }
       else{
@@ -167,7 +167,10 @@ get components(){
 
         this.expensesList.totalMonthByCategories = res.data.monthSummary;
 
-        this.monthSummaryChart.destroy();
+        if(this.monthSummaryChart!==undefined){
+          this.monthSummaryChart.destroy();
+        }
+        
         this.CurrentMonthByCategoriesChart();
       });
     }
@@ -196,6 +199,15 @@ get components(){
       pieChartResult = 0;
       summary.setAttribute('style', 'color: red');
     } else {
+      this.prevMonth = this.expensesList.previousMonthResult - this.expensesList.outgoings;
+
+      if(this.prevMonth < 0){
+        this.prevMonth = this.prevMonth * -1
+        this.isBetterMonth = false;
+      }
+      else{
+        this.isBetterMonth = true;
+      }
       pieChartResult = this.expensesList.monthlyResult;
       summary.setAttribute('style', 'color: black');
     }
@@ -203,16 +215,24 @@ get components(){
     this.summaryChart.data.datasets[0].data[1] = this.expensesList.outgoings;
 
     this.summaryChart.update();
-
-    this.monthSummaryChart.destroy();
+    
+    if(this.monthSummaryChart !== undefined){
+      this.monthSummaryChart.destroy();
+    }
+    
     this.CurrentMonthByCategoriesChart();
 
-    this.weekSummaryChart.destroy();
-    this.weeklyExpenses = 0;
+    if(this.weekSummaryChart !== undefined){
+      this.weekSummaryChart.destroy();
+      this.weeklyExpenses = 0;
+    }
+   
     this.CurrentWeekExpensesChart();
 
-    let element = document.getElementById('chart') as HTMLInputElement;
-    element.innerHTML = '';
+    const element = document.getElementById('chart');
+    if(element){
+        element.innerHTML = '';
+    }
     this.MonthlyGoals();
   }
 
