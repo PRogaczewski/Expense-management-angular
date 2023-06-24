@@ -44,12 +44,12 @@ export class AddIncomeComponent implements OnInit {
             }
           });
 
-          //window.location.reload();
+          this.newIncomeForm.reset();
         }
         catch(err){
           console.log(err)
         }
-      
+        this.submitted = false;
     }
     else{
       this.submitted=true;

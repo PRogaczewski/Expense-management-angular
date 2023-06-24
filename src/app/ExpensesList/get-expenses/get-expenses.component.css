@@ -1,0 +1,23 @@
+.container {
+  margin: auto;
+  width: 90%;
+  max-width: 2000px;
+  min-width: 550px;
+}
+
+.item {
+  /* position: relative;*/
+  display: flex; 
+  justify-content: space-between;
+  padding: 15px 10px 10px 20px;
+  margin: 5px;
+  background-color: rgb(219, 219, 219);
+  font-size: 1.4rem;
+  border-radius: 20px;
+}
+
+.btns {
+  display: flex;
+  float: right;
+  margin-right: 10px;
+}

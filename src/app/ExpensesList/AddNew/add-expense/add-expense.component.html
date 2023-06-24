@@ -9,6 +9,9 @@
         <form [formGroup]="newExpenseForm" (ngSubmit)="NewExpense()">
           <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
             <div class="modal-body">
+              <label >Name</label>
+                <input style="margin-bottom: 5%;" formControlName="name" class="form-control"
+                  placeholder="Food"/>
               <label >Price</label>
                 <input formControlName="price" class="form-control"
                 placeholder="50.90" required/>

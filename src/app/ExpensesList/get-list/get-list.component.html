@@ -19,7 +19,23 @@
                 <h4 id="summary">Summary: {{expensesList?.monthlyResult}} PLN</h4>
             </div> 
         </div>
-        <div class="MonthlySummary">
+        <div class="MonthlySummary" >  <!--style="width: 71%; max-width: 2640px; display: inline;" -->
+            <h2>Annual summary {{curr.getFullYear()}}</h2>
+            <div class="MonthlySummary-A">
+                <div class="MonthlySummary-Cat" style="max-width: 2430px;">
+                    <canvas id="AnnualSummaryChart" ></canvas>  <!--style="max-height: 91%;"-->
+                </div> 
+            </div>  
+            <div class="MonthlySummary-C" style="text-align: left;">
+                <h4>Total year incomes: {{expensesList?.totalYearIncomes}} PLN</h4>
+                <h4>Total year outgoings: - {{expensesList?.totalYearOutgoings}} PLN</h4>
+                <h4 id="summary">Summary: {{(expensesList?.totalYearIncomes - expensesList?.totalYearOutgoings).toFixed(2)}} PLN</h4>
+            </div> 
+        </div>
+    </div>
+
+    <div class="row justify-content-center" style="margin-left: 0%; width: 100%;">
+        <div class="MonthlySummary" style="width: 71%; max-width: 2640px; display: inline;">
             <h2>Monthly expenses summary</h2>
             <div style="float: right">
                 <form [formGroup]="SelectMonthSummaryForm">
@@ -40,10 +56,13 @@
                       </svg>
                 </h4>
                 <div class="MonthlySummary-Cat">
-                    <canvas id="MonthExpensesChart"></canvas>
+                    <canvas id="MonthExpensesChart" style="max-height: 670px;"></canvas>
                 </div>   
             </div>         
         </div>
+    </div>
+
+    <div class="row justify-content-center" style="margin-left: 0%; width: 100%;">
         <div class="MonthlySummary">
             <h2>Weekly expenses summary</h2>
             <div class="MonthlySummary-A">

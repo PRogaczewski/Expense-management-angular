@@ -10,7 +10,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css', '../register/register.component.css'],
 })
-
 export class LoginComponent implements OnInit {
   loginGroup!: FormGroup;
 
@@ -40,23 +39,25 @@ export class LoginComponent implements OnInit {
         password: this.getComponents['password'].value,
       };
 
-      try{
+      try {
         const model = await this.service.Login(loginModel);
-      
-      if(model.status == 200){
-        this.routing.setUserInfo(true);
-        this.routing.setUserName(model.data.name);
 
-        this.auth.SetToken(model.data.token);
-        this.auth.SetUserContext(model.data.name);
-        this.route.navigateByUrl('/');
-      }
-      }
-      catch(err){
-        console.log(err)
-        if(err instanceof Error){
-          this.loginGroup.setErrors({unexpected: true})
-          console.log(err.message)
+        if (model.status == 200) {
+          this.routing.setUserInfo(true);
+          this.routing.setUserName(model.data.name);
+
+          this.auth.SetToken(model.data.token);
+          this.auth.SetUserContext(model.data.name);
+          this.route.navigateByUrl('/');
+        }
+      } catch (err: any) {
+        console.log(err.response.data);
+
+        if (err.response.data === 'Invalid password.') {
+          this.loginGroup.setErrors({ invalidPassword: true });
+        }
+        else{
+          this.loginGroup.setErrors({ unexpected: true });
         }
       }
     }

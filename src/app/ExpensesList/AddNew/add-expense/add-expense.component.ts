@@ -26,6 +26,7 @@ export class AddExpenseComponent implements OnInit {
     this.success = false;
 
     this.newExpenseForm = this.formBuilder.group({
+      name: [''],
       price: ['', Validators.required],
       category: [0, Validators.required],
     })
@@ -35,35 +36,45 @@ export class AddExpenseComponent implements OnInit {
     this.mappedCategoires = new Map(this.categories.map((value, index) => [index, value]));
   }
 
-  async NewExpense(){
+  async NewExpense() {
     this.submitted = true;
     this.StringContainsComma(this.getComponents['price'].value)
 
     if(this.newExpenseForm.valid){
       let expenseRequest = {
+        name: this.getComponents['name'].value.toString(),
         category: parseInt(this.getComponents['category'].value),
         price: parseFloat(this.getComponents['price'].value),
         userExpensesListId: this.listId!
       };
-  
-      try{
-        await this.service.AddExpense(expenseRequest).then(()=>{
-          try {
-            this.getlistComponent.emit(this.listId)
-      
-          } catch (err) {
-            console.log(err);
-          }
-        });
 
-        this.success = true;
-        this.newExpenseForm.reset();
-        this.submitted = false;
+      if(expenseRequest.price < 0){
+        this.success = false;
       }
-      catch(err){
-        console.log(err);
+      else{
+        try{
+          await this.service.AddExpense(expenseRequest).then(()=>{
+            try {
+              this.getlistComponent.emit(this.listId)
+        
+            } catch (err) {
+              console.log(err);
+            }
+          });
+  
+          this.success = true;
+          this.newExpenseForm.reset();
+          this.newExpenseForm.patchValue({
+            name: '',
+            price: '',
+            category: 0,
+          });
+          this.submitted = false;
+        }
+        catch(err){
+          console.log(err);
+        }
       }
-      
     }
     else{
       this.success = false;

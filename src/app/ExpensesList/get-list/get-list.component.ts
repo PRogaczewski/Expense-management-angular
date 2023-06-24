@@ -32,6 +32,7 @@ export class GetListComponent implements OnInit {
 
   currMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' })
   prevMonth: number = 0;
+  totalOutgoings: number = 0;
   isBetterMonth: boolean = false;
 
   colors: string[] = [
@@ -75,6 +76,7 @@ export class GetListComponent implements OnInit {
 
   summaryChart!: Chart<"pie", any[], string>;
   monthSummaryChart!: Chart<"bar", any[], string>;
+  annualSummaryChart!: Chart<"bar", any[], string>;
   weekSummaryChart!: Chart<"doughnut", any[], string>;
 
   months:Map<number,string> = new Map;
@@ -121,7 +123,7 @@ get components(){
 
     if(this.expensesList !== undefined){
 
-      this.prevMonth = this.expensesList.previousMonthResult - this.expensesList.outgoings;
+      this.prevMonth = this.expensesList.previousMonthTotalResult - this.expensesList.outgoings;
 
       if(this.prevMonth < 0){
         this.prevMonth = (this.prevMonth * -1)
@@ -135,6 +137,10 @@ get components(){
 
       if(Object.keys(this.expensesList.totalMonthByCategories).length > 0){
         this.CurrentMonthByCategoriesChart();
+      }
+
+      if(Object.keys(this.expensesList.annualSummary).length > 0){
+        this.AnnualSummaryChart();
       }
 
       if(Object.keys(this.expensesList.currentWeekByCategories).length > 0){
@@ -199,7 +205,7 @@ get components(){
       pieChartResult = 0;
       summary.setAttribute('style', 'color: red');
     } else {
-      this.prevMonth = this.expensesList.previousMonthResult - this.expensesList.outgoings;
+      this.prevMonth = this.expensesList.PreviousMonthTotalResult - this.expensesList.outgoings;
 
       if(this.prevMonth < 0){
         this.prevMonth = this.prevMonth * -1
@@ -234,7 +240,15 @@ get components(){
         element.innerHTML = '';
     }
     this.MonthlyGoals();
+
+    if(this.annualSummaryChart !== undefined){
+      this.annualSummaryChart.destroy();
+    }
+
+    this.AnnualSummaryChart();
   }
+
+
 
   SummaryChart() {
     var pieChartResult;
@@ -284,6 +298,45 @@ get components(){
             data: data,
             backgroundColor: this.colors,
             borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+  }
+
+  AnnualSummaryChart() {
+    const labels: any[] = [];
+    const data: any[] = [];
+    const monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December' ];
+
+    Object.entries(this.expensesList.annualSummary).forEach(
+      ([key, value]) => {
+       
+        const monthName = monthNames[Number(key)-1];
+        labels.push(monthName);
+        data.push(value);
+      }
+    );
+
+    this.annualSummaryChart = new Chart('AnnualSummaryChart', {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total expenses in month',
+            data: data,
+            backgroundColor: "#b3e0ff",
+            borderColor: "#66c2ff",
+            borderWidth: 3,
           },
         ],
       },

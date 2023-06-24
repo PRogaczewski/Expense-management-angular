@@ -7,8 +7,8 @@ import { AuthService } from '../AuthService';
   providedIn: 'root'
 })
 export class ApiService {
-readonly port = "5800" //docker
-//7165
+readonly port = "5800"; //docker 5800
+//local api 7165
 readonly HomeApiUrl="https://localhost:" + this.port + "/Home/";
 readonly AnalysisApiUrl = "https://localhost:" + this.port + "/ExpensesList/";
 categories=[];
@@ -71,5 +71,9 @@ categories=[];
 
   async AddUserGoals(UserExpenseGoalDto: any){
     return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', UserExpenseGoalDto);
+  }
+
+  async GetExpenses(id: number, page: number = 0){
+    return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page);
   }
 }

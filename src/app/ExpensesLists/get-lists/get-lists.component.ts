@@ -16,8 +16,10 @@ export class GetListsComponent implements OnInit {
   AnyList: boolean = true;
 
   IsUserLogged: boolean = false;
+  userHistory: boolean = false;
 
  constructor(
+    private currRoute: ActivatedRoute,
     private service: ApiService,
     private route: Router,
     private eventSubscriber: ActivatedRoute,
@@ -25,16 +27,22 @@ export class GetListsComponent implements OnInit {
     private auth: AuthService
   ) {
     route.events.subscribe((event) => {
-      
+
       if(this.IsUserLogged && !this.route.url.includes('/ExpensesList/')){
         this.GetList();
         this.userNavbar = false;
       }
+      else if(this.route.url.includes('/ExpenseHistory') && this.route.url.includes('/ExpensesList/') && this.IsUserLogged){
+        this.userNavbar = true;
+        this.userHistory = true;
+      }
       else if(this.route.url.includes('/ExpensesList/') && this.IsUserLogged){
-        this.userNavbar = true
+        this.userNavbar = true;
+        this.userHistory = false;
       }
       else{
         this.userNavbar = false;
+        this.userHistory = false;
       }
     });
 
@@ -64,8 +72,8 @@ export class GetListsComponent implements OnInit {
           this.expensesLists = res.data.userLists;
         });
       }
-      catch{
-        console.log("some err")
+      catch (err){
+        console.log(err)
       }
     }
   }
@@ -90,6 +98,23 @@ export class GetListsComponent implements OnInit {
     //this.expensesList.GetExpensesList(id);
     this.route.navigate(['/ExpensesList/' + id]);
     this.userNavbar = true;
+    this.userHistory = false;
+  }
+
+  ReturnToExpensesList() {
+    let id = parseInt(this.route.url.split('/')[2]!);
+
+    this.route.navigate(['/ExpensesList/' + id]);
+    this.userNavbar = true;
+    this.userHistory = false;
+  }
+
+  GetExpenseHistory() {
+    let id = parseInt(this.route.url.split('/').pop()!);
+
+    this.route.navigate(['/ExpensesList/' + id + '/ExpenseHistory']);
+    this.userNavbar = true;
+    this.userHistory = true;
   }
 
   AddNewList() {

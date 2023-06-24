@@ -52,13 +52,32 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  ChangePassword() {
-    //todo
+  async ChangePassword() {
+    if(this.changePassForm.valid) {
+
+      let changePassRequest = {
+        name:  this.auth.GetUserContext(),
+        password: this.getComponents['oldPassword'].value,
+        newPassword: this.getComponents['newPassword'].value,
+        confirmedNewPassword: this.getComponents['confirmedNewPassword'].value
+      };
+  
+      try{
+        await this.service.ChangePassword(changePassRequest);
+        console.log("success")
+      }
+      catch(err){
+        console.log(err);
+      }
+      
+    }
+    else{
+      console.log("inv")
+    }  
   }
 
   DeleteAccount() {
     if (confirm('Are you sure you want to delete your account?')) {
-      console.log('aaaaaaa');
 
       this.auth.RemoveToken();
       this.auth.RemoveUserContext();

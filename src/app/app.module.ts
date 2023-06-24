@@ -18,6 +18,7 @@ import { RegisterComponent } from './Authentication/register/register.component'
 import { AuthenticationComponent } from './Authentication/authentication/authentication.component';
 import { DeleteListComponent } from './ExpensesList/delete-list/delete-list.component';
 import { AccountComponent } from './Account/account/account.component';
+import { GetExpensesComponent } from './ExpensesList/get-expenses/get-expenses.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { AccountComponent } from './Account/account/account.component';
     AuthenticationComponent,
     DeleteListComponent,
     AccountComponent,
+    GetExpensesComponent,
   ],
   imports: [
     BrowserModule,

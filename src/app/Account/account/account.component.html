@@ -7,10 +7,10 @@
         <button (click)="ChangePasswordSite()" class="btn btn-outline-dark">Change password</button>
       </div>
 
-      <div id="changePass" style="display: none;">  
+      <div id="changePass" style="display: none; padding-top: 2%;">  
         <form [formGroup]="changePassForm" #form="ngForm" (ngSubmit)="ChangePassword()">
           <div>
-              <input class="AuthenticationContainer__input" type="text" placeholder="Current password" formControlName="oldPassword" required/>
+              <input class="AuthenticationContainer__input" type="password" placeholder="Current password" formControlName="oldPassword" required/>
               <div *ngIf="changePassForm.controls['oldPassword'].invalid && form.submitted">
                   <span style="color:red; display: flex; padding-left: 22%;" *ngIf="changePassForm.controls['oldPassword'].errors?.['required']">Password is required</span>
               </div>
