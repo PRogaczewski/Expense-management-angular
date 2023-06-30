@@ -188,7 +188,12 @@ get components(){
   async GetExpensesList(id: number) {
     try {
       await this.service.GetExpensesList(id).then((res) => {
-        this.expensesList = res.data;
+
+        if(res.status !== 200){
+          throw Error(res.status.toString());
+        } else {
+          this.expensesList = res.data;
+        }
       });
 
     } catch (err) {
@@ -205,15 +210,6 @@ get components(){
       pieChartResult = 0;
       summary.setAttribute('style', 'color: red');
     } else {
-      this.prevMonth = this.expensesList.PreviousMonthTotalResult - this.expensesList.outgoings;
-
-      if(this.prevMonth < 0){
-        this.prevMonth = this.prevMonth * -1
-        this.isBetterMonth = false;
-      }
-      else{
-        this.isBetterMonth = true;
-      }
       pieChartResult = this.expensesList.monthlyResult;
       summary.setAttribute('style', 'color: black');
     }
@@ -222,6 +218,15 @@ get components(){
 
     this.summaryChart.update();
     
+    this.prevMonth = this.expensesList.previousMonthTotalResult - this.expensesList.outgoings;
+    if(this.prevMonth < 0){
+      this.prevMonth = this.prevMonth * -1
+      this.isBetterMonth = false;
+    }
+    else{
+      this.isBetterMonth = true;
+    }
+
     if(this.monthSummaryChart !== undefined){
       this.monthSummaryChart.destroy();
     }

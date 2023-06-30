@@ -1,0 +1,35 @@
+<!-- Modal -->
+<div class="modal fade" id="getExpenseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="getExpenseForm" (ngSubmit)="UpdateExpense()">
+          <span style="color: green; padding-left: 20px; font-size: 25px;" *ngIf="success">Success</span>
+            <div class="modal-body">
+              <label >Name</label>
+                <input style="margin-bottom: 5%;" formControlName="name" class="form-control"
+                  placeholder="Food"/>
+              <label >Price</label>
+                <input formControlName="price" class="form-control"
+                placeholder="50.90" required/>
+                <span style="color:red" *ngIf="getExpenseForm.controls['price'].errors?.['required']">Price is required</span>
+                <span style="color:red" *ngIf="getExpenseForm.errors?.['commaValidator']">',' is not correct character</span>
+              </div>
+            <div class="modal-body">
+                <label >Category</label>
+                <select formControlName="category" id="category" required class="form-select" aria-label="Default select example">
+                  <option *ngFor="let type of mappedCategoires | keyvalue" [ngValue]="+type.key" selected>{{type.value}}</option>
+              </select>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="closeBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Update</button>
+            </div>
+        </form>
+    </div>
+  </div>
+  </div>

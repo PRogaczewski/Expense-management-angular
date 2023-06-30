@@ -7,7 +7,7 @@ import { AuthService } from '../AuthService';
   providedIn: 'root'
 })
 export class ApiService {
-readonly port = "5800"; //docker 5800
+readonly port = "7165"; //docker 5800
 //local api 7165
 readonly HomeApiUrl="https://localhost:" + this.port + "/Home/";
 readonly AnalysisApiUrl = "https://localhost:" + this.port + "/ExpensesList/";
@@ -69,11 +69,23 @@ categories=[];
     return axios.post(this.AnalysisApiUrl, expense);
   }
 
+  async GetExpense(id:number){
+    return axios.get(this.AnalysisApiUrl + 'Expenses/' + id);
+  }
+
+  async UpdateExpense(id:number, expense:any){
+    return axios.put(this.AnalysisApiUrl+ 'Expenses/' + id, expense);
+  }
+
+  async DeleteExpense(id:number){
+    return axios.delete(this.AnalysisApiUrl + 'Expenses/' + id);
+  }
+
   async AddUserGoals(UserExpenseGoalDto: any){
     return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', UserExpenseGoalDto);
   }
 
-  async GetExpenses(id: number, page: number = 0){
-    return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page);
+  async GetExpenses(id: number, page: number = 1, size: number = 30){
+    return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page + '&pagesize=' + size);
   }
 }

@@ -19,6 +19,7 @@ import { AuthenticationComponent } from './Authentication/authentication/authent
 import { DeleteListComponent } from './ExpensesList/delete-list/delete-list.component';
 import { AccountComponent } from './Account/account/account.component';
 import { GetExpensesComponent } from './ExpensesList/get-expenses/get-expenses.component';
+import { ExpenseDetailsComponent } from './ExpensesList/expense-details/expense-details.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { GetExpensesComponent } from './ExpensesList/get-expenses/get-expenses.c
     DeleteListComponent,
     AccountComponent,
     GetExpensesComponent,
+    ExpenseDetailsComponent,
   ],
   imports: [
     BrowserModule,

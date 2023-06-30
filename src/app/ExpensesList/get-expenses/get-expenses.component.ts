@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/AuthService';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -9,21 +11,26 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class GetExpensesComponent implements OnInit {
   expenses: any[] = [];
-  page: number = 0;
+  page: number = 1;
   id: string | null;
+  modalId: number | null = null;
   isNextPage:boolean = true;
  
-  constructor(private service: ApiService, private currRoute: ActivatedRoute) {
+  constructor(private service: ApiService, private currRoute: ActivatedRoute,private auth: AuthService,private route: Router) {
     this.id = this.currRoute.snapshot.paramMap.get('id');
-  }
-
+  } 
+  
   async ngOnInit() {
+    if (!this.auth.GetUserContext()) {
+      console.log('user not authenticated');
+      this.route.navigate(['']);
+    }
 
     window.addEventListener('scroll', this.OnScrollLoadData.bind(this));
     
     try {
       await this.service.GetExpenses(parseInt(this.id!)).then((res) => {
-        this.expenses = res.data;
+        this.expenses = res.data.items.data;
       });
     } catch (err) {
       console.log(err);
@@ -32,9 +39,6 @@ export class GetExpensesComponent implements OnInit {
 
    async OnScrollLoadData(){
 
-    // if(nativeElement.clientHeight + Math.round(nativeElement.scrollTop) === nativeElement.scrollHeight){
-    //       console.log("down")
-    // }
     let bottomHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - document.documentElement.clientHeight;
     let currentScroll = document.documentElement.scrollTop;
 
@@ -43,7 +47,7 @@ export class GetExpensesComponent implements OnInit {
       this.isNextPage = false;
       try {
         await this.service.GetExpenses(parseInt(this.id!), this.page).then((res) => {        
-          this.expenses.push(...res.data);
+          this.expenses.push(...res.data.items.data);
           this.isNextPage = true;
         });
       } catch (err) {
@@ -54,13 +58,37 @@ export class GetExpensesComponent implements OnInit {
 
 
   EditExpense(id: number) {
-    console.log(id);
+    this.modalId = id;
   }
 
-  DeleteExpense(id: number) {
+  async DeleteExpense(id: number) {
     if(confirm("Are you sure to delete this expense?")){
-      console.log(id);
+      try {
+        await this.service.DeleteExpense(id).then((res)=>{
+          if(res.status !== 200){
+            throw Error(res.status.toString());
+          } else {
+            //   this.service.GetExpenses(parseInt(this.id!), undefined, this.expenses.length).then((res) => {       
+            //   this.expenses = [];
+            //   this.expenses.push(...res.data.items.data);
+            //   this.isNextPage = true;
+            // });
+            this.FetchData();
+          }
+        });
+      } catch(err){
+        console.log(err);
+      }
+      
     }
+  }
+
+  FetchData(){
+      this.service.GetExpenses(parseInt(this.id!), undefined, this.expenses.length).then((res) => {       
+      this.expenses = [];
+      this.expenses.push(...res.data.items.data);
+      this.isNextPage = true;
+      });
   }
 
   GetDate(firstDate: any, secondDate: any) {
