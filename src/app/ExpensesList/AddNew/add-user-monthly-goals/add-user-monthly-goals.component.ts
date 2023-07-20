@@ -21,22 +21,6 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
 
   mappedCategoires = new Map();
 
-  // months = new Map(
-  //   [
-  //     [0, 'January'],
-  //     [1, 'Feburary'],
-  //     [2, 'March'],
-  //     [3, 'April'],
-  //     [4, 'May'],
-  //     [5, 'June'],
-  //     [6, 'July'],
-  //     [7, 'August'],
-  //     [8, 'September'],
-  //     [9, 'October'],
-  //     [10, 'Novamber'],
-  //     [11, 'December'],
-  //   ]
-  // );
   months:Map<number,string> = new Map;
 
   constructor(private formBuilder: FormBuilder, private service: ApiService, private helper: HelperService) {
@@ -89,22 +73,27 @@ export class AddUserMonthlyGoalsComponent implements OnInit {
         await this.service.AddUserGoals(UserExpenseGoalDto).then(()=>{
           try{
             this.getlistComponent.emit(this.listId);
-            this.success = true;
           }
           catch(err){
             console.log(err);
             this.isNotSuccessfully = true;
           }    
         });
+
+        this.success = true;
+        this.newUserGoalsForm.reset();
+        this.newUserGoalsForm.patchValue({
+           limit: '',
+           category: 0,
+           monthChosenForGoal: new Date().getMonth()
+          });
+        this.submitted = false;
       }
       catch(err){
         console.log(err);
         this.isNotSuccessfully = true;
       }
-
-      this.newUserGoalsForm.reset();
       this.submitted = false;
-
     } else {
       this.submitted = true;
     }

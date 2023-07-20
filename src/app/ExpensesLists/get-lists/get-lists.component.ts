@@ -14,12 +14,12 @@ export class GetListsComponent implements OnInit {
   searchedText: string = '';
   userNavbar: boolean = false;
   AnyList: boolean = true;
+  UserListId?: Number;
 
   IsUserLogged: boolean = false;
   userHistory: boolean = false;
 
  constructor(
-    private currRoute: ActivatedRoute,
     private service: ApiService,
     private route: Router,
     private eventSubscriber: ActivatedRoute,
@@ -39,6 +39,7 @@ export class GetListsComponent implements OnInit {
       else if(this.route.url.includes('/ExpensesList/') && this.IsUserLogged){
         this.userNavbar = true;
         this.userHistory = false;
+        this.UserListId = parseInt(this.route.url.split('/').pop()!);
       }
       else{
         this.userNavbar = false;
@@ -109,13 +110,13 @@ export class GetListsComponent implements OnInit {
     this.userHistory = false;
   }
 
-  GetExpenseHistory() {
-    let id = parseInt(this.route.url.split('/').pop()!);
+  // GetExpenseHistory() {
+  //   let id = parseInt(this.route.url.split('/').pop()!);
 
-    this.route.navigate(['/ExpensesList/' + id + '/ExpenseHistory']);
-    this.userNavbar = true;
-    this.userHistory = true;
-  }
+  //   this.route.navigate(['/ExpensesList/' + id + '/ExpenseHistory']);
+  //   this.userNavbar = true;
+  //   this.userHistory = true;
+  // }
 
   AddNewList() {
     this.route.navigate(['/ExpensesList']);

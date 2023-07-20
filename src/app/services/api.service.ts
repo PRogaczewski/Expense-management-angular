@@ -85,7 +85,14 @@ categories=[];
     return axios.post(this.AnalysisApiUrl + 'ExpensesMonthlyGoal', UserExpenseGoalDto);
   }
 
-  async GetExpenses(id: number, page: number = 1, size: number = 30){
-    return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page + '&pagesize=' + size);
+  async GetExpenses(id: number, page: number = 1, size: number = 30, searchTerm?: string, all: boolean = false){
+
+    if(searchTerm){
+      return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page + '&pagesize=' + size + '&searchTerm=' + searchTerm + '&allRecords=' + all);
+
+    }
+    else{
+      return axios.get(this.AnalysisApiUrl + 'Expenses/' + '?id=' + id + '&page=' + page + '&pagesize=' + size);
+    }
   }
 }

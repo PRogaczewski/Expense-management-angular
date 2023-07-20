@@ -37,7 +37,7 @@ export class GetExpensesComponent implements OnInit {
     }
   }
 
-   async OnScrollLoadData(){
+   async OnScrollLoadData() {
 
     let bottomHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - document.documentElement.clientHeight;
     let currentScroll = document.documentElement.scrollTop;
@@ -68,11 +68,6 @@ export class GetExpensesComponent implements OnInit {
           if(res.status !== 200){
             throw Error(res.status.toString());
           } else {
-            //   this.service.GetExpenses(parseInt(this.id!), undefined, this.expenses.length).then((res) => {       
-            //   this.expenses = [];
-            //   this.expenses.push(...res.data.items.data);
-            //   this.isNextPage = true;
-            // });
             this.FetchData();
           }
         });
@@ -98,5 +93,23 @@ export class GetExpensesComponent implements OnInit {
     }
 
     return false;
+  }
+
+  async SearchForExpense(input:any) {
+    let searchText = input.target.value;
+
+    await this.service.GetExpenses(parseInt(this.id!), 1, 30, searchText, true).then((res)=>{
+      this.expenses = [];
+      this.expenses.push(...res.data.items.data);
+      scroll(0,0);
+
+      if(searchText){
+        this.isNextPage = false;
+      } else {
+        this.isNextPage = true;
+      }
+    
+      this.page = 1;
+    });
   }
 }

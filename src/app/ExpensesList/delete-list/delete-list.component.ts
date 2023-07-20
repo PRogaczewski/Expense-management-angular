@@ -9,7 +9,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class DeleteListComponent implements OnInit {
   @Input() listId?: number;
-  @ViewChild('closeModal') closeModal?: ElementRef;
+  @ViewChild('deleteModal') closeModal?: ElementRef;
 
   constructor(private service: ApiService, private route: Router) {}
 
@@ -18,11 +18,11 @@ export class DeleteListComponent implements OnInit {
   DeleteExpenseList() {
     if (this.listId) {
       try {
+        document.getElementById('testBtn')?.click()
+        //this.closeModal?.nativeElement.click();
+
         this.service.DeleteExpensesList(this.listId)
-
-        this.closeModal?.nativeElement.click();
         this.route.navigate(['/']);
-
       } catch (err) {
         console.log(err);
       }

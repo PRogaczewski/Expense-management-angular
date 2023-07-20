@@ -133,22 +133,39 @@ get components(){
         this.isBetterMonth = true;
       }
 
-      this.SummaryChart();
-
+      if(this.expensesList.outgoings !== 0 || this.expensesList.monthlyResult !== 0) {
+        this.SummaryChart();
+      } else {
+        let element = document.getElementById('noDataPieChartSummary') as HTMLInputElement;
+        element.style.display = 'block'
+      }
+      
       if(Object.keys(this.expensesList.totalMonthByCategories).length > 0){
         this.CurrentMonthByCategoriesChart();
+      } else {
+        let element = document.getElementById('noDataMonthExpensesChart') as HTMLInputElement;
+        element.style.display = 'block'
       }
 
       if(Object.keys(this.expensesList.annualSummary).length > 0){
         this.AnnualSummaryChart();
+      } else {
+        let element = document.getElementById('noDataAnnualSummaryChart') as HTMLInputElement;
+        element.style.display = 'block'
       }
 
       if(Object.keys(this.expensesList.currentWeekByCategories).length > 0){
         this.CurrentWeekExpensesChart();
+      } else {
+        let element = document.getElementById('noDataWeekExpensesChart') as HTMLInputElement;
+        element.style.display = 'block'
       }
      
       if(Object.keys(this.expensesList.userGoals).length > 0){
         this.MonthlyGoals();
+      } else {
+        let element = document.getElementById('noDataMonthlyGoals') as HTMLInputElement;
+        element.style.display = 'block'
       }
     }
   }
@@ -177,7 +194,14 @@ get components(){
           this.monthSummaryChart.destroy();
         }
         
-        this.CurrentMonthByCategoriesChart();
+        if(Object.keys(this.expensesList.totalMonthByCategories).length > 0) {
+          this.CurrentMonthByCategoriesChart();
+          let element2 = document.getElementById('noDataMonthExpensesChart') as HTMLInputElement;
+          element2.style.display = 'none'
+        } else {
+          let element2 = document.getElementById('noDataMonthExpensesChart') as HTMLInputElement;
+          element2.style.display = 'block'
+        }      
       });
     }
     catch(err){
@@ -213,10 +237,29 @@ get components(){
       pieChartResult = this.expensesList.monthlyResult;
       summary.setAttribute('style', 'color: black');
     }
-    this.summaryChart.data.datasets[0].data[0] = pieChartResult;
-    this.summaryChart.data.datasets[0].data[1] = this.expensesList.outgoings;
 
-    this.summaryChart.update();
+    if(this.summaryChart === undefined) {
+      let element = document.getElementById('noDataPieChartSummary') as HTMLInputElement;
+      element.style.display = 'none';
+
+      this.SummaryChart();
+    } else {
+      this.summaryChart.data.datasets[0].data[0] = pieChartResult;
+      this.summaryChart.data.datasets[0].data[1] = this.expensesList.outgoings;
+  
+      this.summaryChart.update();
+    }
+
+    if(this.annualSummaryChart !== undefined){
+      this.annualSummaryChart.destroy();
+    } 
+    
+    this.AnnualSummaryChart();
+
+    if(this.annualSummaryChart !== undefined && document.getElementById('noDataAnnualSummaryChart')?.style.display === 'block') {
+      let element = document.getElementById('noDataAnnualSummaryChart') as HTMLInputElement;
+      element.style.display = 'none';
+    }
     
     this.prevMonth = this.expensesList.previousMonthTotalResult - this.expensesList.outgoings;
     if(this.prevMonth < 0){
@@ -229,13 +272,19 @@ get components(){
 
     if(this.monthSummaryChart !== undefined){
       this.monthSummaryChart.destroy();
+    } else {
+      let element = document.getElementById('noDataMonthExpensesChart') as HTMLInputElement;
+      element.style.display = 'none';
     }
-    
+
     this.CurrentMonthByCategoriesChart();
 
     if(this.weekSummaryChart !== undefined){
       this.weekSummaryChart.destroy();
       this.weeklyExpenses = 0;
+    } else {
+      let element = document.getElementById('noDataWeekExpensesChart') as HTMLInputElement;
+      element.style.display = 'none';
     }
    
     this.CurrentWeekExpensesChart();
@@ -244,16 +293,14 @@ get components(){
     if(element){
         element.innerHTML = '';
     }
+
     this.MonthlyGoals();
-
-    if(this.annualSummaryChart !== undefined){
-      this.annualSummaryChart.destroy();
+    
+    if(element?.querySelector('div') !== null) {
+      let element = document.getElementById('noDataMonthlyGoals') as HTMLInputElement;
+      element.style.display = 'none';
     }
-
-    this.AnnualSummaryChart();
   }
-
-
 
   SummaryChart() {
     var pieChartResult;
@@ -484,7 +531,7 @@ get components(){
     );
     const lastHrEl = document.getElementById('chart');
 
-    if (lastHrEl != null && lastHrEl.lastChild!.nodeName === 'HR') {
+    if (lastHrEl != null && lastHrEl.lastChild?.nodeName === 'HR') {
       lastHrEl.removeChild(lastHrEl.lastChild!);
     }
   }

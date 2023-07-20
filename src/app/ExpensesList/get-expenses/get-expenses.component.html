@@ -1,8 +1,18 @@
 <app-expense-details [id]="modalId" (fetchData)="FetchData()"></app-expense-details>
 
 <div class="MainWindow-View" id="currentWindow">
-    <h2 style="margin-top: 30px;">Expenses history</h2>
+    <h2 style="margin-top: 25px;margin-bottom: 25px; text-align: center;">Expenses history</h2>
     <div class="row justify-content-center container">
+      <div class="row justify-content-center container" style="position: fixed; padding-bottom: 100px;">
+        <input class="search-panel"
+        id="expenseSearch" 
+        placeholder="Search..."
+        title="Press enter to search"
+        (keyup.enter)="SearchForExpense($event)"
+      />  
+      </div>
+      
+        <span style="margin-top: 50px;"></span>
         <div *ngFor="let item of expenses; let i = index">
           <div style="display: block; font-size: 2rem;">
             <span *ngIf="i == 0">{{item.createdDate | date: 'MMMM'}}</span>
@@ -10,7 +20,7 @@
           </div>
           <div  class="item">         
           <div>
-           <span>{{item.name}} {{item.category}}</span><span style="color: red;"> -{{item.price}} PLN</span><span> | {{item.createdDate | date: 'longDate'}}</span>
+           <span>{{item.name}} {{item.category}}: </span><span style="color: red;"> -{{item.price}} PLN</span><span> | {{item.createdDate | date: 'longDate'}}</span>
           </div>
           <div class="btns">
             <button (click)="EditExpense(item.id)" data-bs-toggle="modal" data-bs-target="#getExpenseModal" style="margin-left: -7%;" style="margin-right: 5px;" class="btn btn-warning" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">

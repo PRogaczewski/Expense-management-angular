@@ -76,12 +76,16 @@
   display: none;
 }
 
-/* @media screen and (max-width: 2500px) {
-  .container{
-    display: inline-block;
-    overflow: hidden;
-    flex-direction: row;
-   flex-wrap:calc();
+@media screen and (max-width: 1580px) {
+  #AnnualSummaryChartDiv, #PieChartSummaryDiv{
+    max-height: 450px;
+    min-height: 450px;
   }
 } 
-*/
+
+@media screen and (min-width: 1585px) {
+  #AnnualSummaryChartDiv, #PieChartSummaryDiv{
+    /* max-height: 650px; */
+    min-height: 500px;
+  }
+} 

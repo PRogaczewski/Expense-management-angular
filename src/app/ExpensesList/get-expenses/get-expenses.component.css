@@ -21,3 +21,23 @@
   float: right;
   margin-right: 10px;
 }
+
+.search-panel {
+  -webkit-box-shadow: 0px 0px 21px -3px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 0px 0px 21px -3px rgba(66, 68, 90, 1);
+  box-shadow: 0px 0px 21px -3px rgba(66, 68, 90, 1);
+}
+
+.search-panel:focus {
+  -webkit-box-shadow: 0px 0px 21px 6px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 0px 0px 21px 6px rgba(66, 68, 90, 1);
+  box-shadow: 0px 0px 21px 6px rgba(66, 68, 90, 1);
+}
+
+#expenseSearch {
+  width: 60%;
+  font-size: 1.4rem;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}

@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
           this.route.navigateByUrl('/');
         }
       } catch (err: any) {
+        console.log(err.response);
         console.log(err.response.data);
 
         if (err.response.data === 'Invalid password.') {

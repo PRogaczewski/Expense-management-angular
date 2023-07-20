@@ -13,7 +13,6 @@
           id="mySearch"
           (keyup)="SearchExpensesList()"
           placeholder="Search.."
-          title="Type in a category"
         />
         <hr />
         <div *ngIf="AnyList" style="margin-left:5px;font-size: 1.1rem;">
@@ -59,7 +58,7 @@
     <hr/>
     <a>Year by categories (...)</a>
     <a>Compare (in progress)</a>
-    <a (click)="GetExpenseHistory()">Expense history</a>
+    <a href="/ExpensesList/{{UserListId}}/ExpenseHistory">Expense history</a>
     <hr/>
     <a data-bs-toggle="modal" data-bs-target="#deleteModal" style="margin-left: -7%;">
       <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 15 20">
